@@ -1,0 +1,31 @@
+{
+  "name": "really-simple-featured-image",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "package": "wp-scripts plugin-zip",
+    "packages-update": "wp-scripts packages-update",
+    "translate": "wp i18n make-pot . ./languages/really-simple-featured-image.pot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jetixwp/really-simple-featured-image.git"
+  },
+  "author": "JetixWP",
+  "license": "GPL-3.0-only",
+  "bugs": {
+    "url": "https://github.com/jetixwp/really-simple-featured-image/issues"
+  },
+  "homepage": "https://jetixwp.com/plugins/really-simple-featured-image",
+  "devDependencies": {
+    "@wordpress/scripts": "^30.17.0"
+  },
+  "files": [
+    "assets",
+    "includes",
+    "languages",
+    "readme.txt",
+    "really-simple-featured-image.php"
+  ]
+}
