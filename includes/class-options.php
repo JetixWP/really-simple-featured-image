@@ -9,33 +9,18 @@ namespace RS_Featured_Image;
 
 defined( 'ABSPATH' ) || exit;
 
+use RS_Featured_Image\Utils\Has_Instance;
+
 /**
  * ReallySimpleFeaturedImage options registration and management.
  */
 class Options {
-	/**
-	 * Class instance.
-	 *
-	 * @var $instace
-	 */
-	protected static $instance;
+	use Has_Instance;
 
 	/**
 	 * Options key.
 	 */
 	const OPTION_KEY = 'rs_featured_image_options';
-
-	/**
-	 * Get an instance of class.
-	 *
-	 * @return Options
-	 */
-	public static function get_instance() {
-		if ( is_null( self::$instance ) ) {
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
 
 	/**
 	 * Checks whether or not a value is set for the given option.

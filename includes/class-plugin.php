@@ -8,6 +8,7 @@
 namespace RS_Featured_Image;
 
 use RS_Featured_Image\Settings\Register_Settings;
+use RS_Featured_Image\Sources\Register_Sources;
 
 /**
  * Class RS_Featured_Image\Plugin.
@@ -33,6 +34,13 @@ final class Plugin {
 	 * @var Register_Settings;
 	 */
 	public $settings_manager;
+
+	/**
+	 * Sources Manager.
+	 *
+	 * @var Register_Sources;
+	 */
+	public $sources_manager;
 
 	/**
 	 * Plugin constructor.
@@ -69,8 +77,14 @@ final class Plugin {
 	 * @return void
 	 */
 	public function register() {
+		// Options.
+		$this->options_manager = Options::get_instance();
+
 		// Register Settings.
-		// $this->settings_manager = new Register_Settings();
+		$this->settings_manager = Register_Settings::get_instance();
+
+		// Register Sources.
+		$this->sources_manager = Register_Sources::get_instance();
 
 		// Register action links.
 		add_filter( 'network_admin_plugin_action_links_' . RS_FEATURED_IMAGE_PLUGIN_BASE, array( $this, 'filter_plugin_action_links' ) );
@@ -83,9 +97,16 @@ final class Plugin {
 	 * @return void
 	 */
 	public function includes() {
+		// Utilities.
+		require_once RS_FEATURED_IMAGE_PLUGIN_DIR . 'includes/Utils/trait-has-instance.php';
+
+		// Settings.
 		require_once RS_FEATURED_IMAGE_PLUGIN_DIR . 'includes/helpers.php';
 		require_once RS_FEATURED_IMAGE_PLUGIN_DIR . 'includes/class-options.php';
-		// require_once RS_FEATURED_IMAGE_PLUGIN_DIR . 'includes/Settings/class-register-settings.php';
+		require_once RS_FEATURED_IMAGE_PLUGIN_DIR . 'includes/Settings/class-register-settings.php';
+
+		// Sources.
+		require_once RS_FEATURED_IMAGE_PLUGIN_DIR . 'includes/Sources/class-register-sources.php';
 	}
 
 	/**

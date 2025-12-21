@@ -1,4 +1,4 @@
-[![License](https://img.shields.io/badge/license-GPL--2.0%2B-red.svg)](https://github.com/jetixwp/really-simple-free-shipping/blob/master/license.txt)
+[![License](https://img.shields.io/badge/license-GPL--2.0%2B-red.svg)](https://github.com/jetixwp/really-simple-featured-image/blob/master/license.txt)
 
 # Really Simple Featured Image - Setup Documentation
 
