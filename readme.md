@@ -31,7 +31,16 @@
 
 ## Installation
 
-### Method 1: Via WordPress Plugin Directory
+### Method 1: Via Our Site
+
+1. Download the plugin zip file from [JetixWP.com >> Really Simple Featured Image](https://jetixwp.com/plugins/really-simple-featured-image/#pricing)
+2. Navigate to **Plugins > Add New**
+3. Upload the `really-simple-featured-image.zip` downloaded zip via the Upload selector and hit Install.
+4. Go to **Plugins** in WordPress admin and find "Really Simple Featured Image".
+5. Once installed, click **Activate Plugin**
+6. You'll see a new menu item: **JetixWP > Auto Featured Image**
+
+### Method 2: Via WordPress Plugin Directory
 
 1. Log in to your WordPress dashboard
 2. Navigate to **Plugins > Add New**
@@ -39,14 +48,6 @@
 4. Click **Install Now** button
 5. Once installed, click **Activate Plugin**
 6. You'll see a new menu item: **JetixWP > Auto Featured Image**
-
-### Method 2: Manual Installation
-
-1. Download the plugin zip file from [GitHub Releases](https://github.com/jetixwp/really-simple-featured-image/releases)
-2. Extract the zip file
-3. Upload the `really-simple-featured-image` folder via FTP to `/wp-content/plugins/`
-4. Go to **Plugins** in WordPress admin and find "Really Simple Featured Image"
-5. Click **Activate Plugin**
 
 ### Verification
 
