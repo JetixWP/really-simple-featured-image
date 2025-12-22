@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Really Simple Featured Image
  * Plugin URI:  https://github.com/JetixWP/really-simple-featured-image
- * Description: Automatically set the featured image for any CPT from the image or Youtube, Vimeo and Dailymotion video in content.
+ * Description: Automatically set the featured image from Image or Youtube, Vimeo, Dailymotion video in content.
  * Version:     1.0.0
  * Author:      JetixWP Plugins
  * Author URI:  https://jetixwp.com
