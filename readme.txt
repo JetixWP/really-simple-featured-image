@@ -17,7 +17,7 @@ This section describes how to install the plugin and get it working. e.g.
 
 1. Upload the plugin files to the `/wp-content/plugins/really-simple-featured-image` directory, or install the plugin through the Plugins >> Add new screen directly.
 2. Activate the plugin through the 'Plugins' screen in WordPress.
-3. Head to 'Really Simple Featured Image' page from WordPress sidebar menu.
+3. Head to 'JetixWP >> Auto Featured Image' page from WordPress sidebar menu.
 
 == Frequently Asked Questions ==
 
