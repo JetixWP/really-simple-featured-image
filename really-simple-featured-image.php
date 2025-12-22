@@ -26,6 +26,11 @@ define( 'RS_FEATURED_IMAGE_PLUGIN_BASE', plugin_basename( RS_FEATURED_IMAGE_PLUG
 define( 'RS_FEATURED_IMAGE_PLUGIN_PRO_URL', '' );
 
 /**
+ * Include and initialize the updater.
+ */
+require_once RS_FEATURED_IMAGE_PLUGIN_DIR . 'includes/class-updater.php';
+\RS_Featured_Image\Updater::init_updater();
+/**
  * Fire up plugin instance.
  */
 add_action(

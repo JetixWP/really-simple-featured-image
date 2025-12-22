@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "package": "wp-scripts plugin-zip",
+    "package": "composer install --no-dev && wp-scripts plugin-zip",
     "packages-update": "wp-scripts packages-update",
     "translate": "wp i18n make-pot . ./languages/really-simple-featured-image.pot"
   },
@@ -22,6 +22,7 @@
     "@wordpress/scripts": "^30.17.0"
   },
   "files": [
+    "vendor",
     "assets",
     "includes",
     "languages",
