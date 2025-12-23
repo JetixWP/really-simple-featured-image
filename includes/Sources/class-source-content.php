@@ -75,8 +75,10 @@ class Source_Content {
 			return;
 		}
 
+		$content_length = apply_filters( 'rs_featured_image_read_content_length_limit', 6000, $source_set, $post_id );
+
 		// Limit content length to 6000 characters to improve performance.
-		$content = substr( $content, 0, 6000 );
+		$content = substr( $content, 0, $content_length );
 
 		// Extract image URLs from content.
 		$image_urls = $this->get_image_urls_from_content( $content );
