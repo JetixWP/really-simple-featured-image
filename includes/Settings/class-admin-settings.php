@@ -383,6 +383,43 @@ class Admin_Settings {
 					</tr>
 					<?php
 					break;
+
+				// Standard text inputs and subtypes like 'number'.
+				case 'promo-text':
+				case 'promo-password':
+				case 'promo-datetime':
+				case 'promo-datetime-local':
+				case 'promo-date':
+				case 'promo-month':
+				case 'promo-time':
+				case 'promo-week':
+				case 'promo-number':
+				case 'promo-email':
+				case 'promo-url':
+				case 'promo-tel':
+					$option_value = $value['value'];
+
+					?>
+					<tr valign="top" class="<?php echo esc_attr( sanitize_title( $value['type'] ) ); ?>">
+						<th scope="row" class="titledesc">
+							<label for="<?php echo esc_attr( $value['id'] ); ?>"><a href="<?php echo esc_url( RS_FEATURED_IMAGE_PLUGIN_PRO_URL . '/?utm_source=plugin&utm_medium=referral&utm_campaign=settings' ); ?>" target="_blank"><span class="pro-tag">Pro</span><?php echo esc_html( $value['title'] ); ?> <?php echo wp_kses( $tooltip_html, wp_kses_allowed_html() ); ?></a></label>
+						</th>
+						<td class="forminp forminp-<?php echo esc_attr( sanitize_title( $value['type'] ) ); ?>">
+							<input
+								name="<?php echo esc_attr( $value['id'] ); ?>"
+								id="<?php echo esc_attr( $value['id'] ); ?>"
+								type="<?php echo esc_attr( $value['type'] ); ?>"
+								style="<?php echo esc_attr( $value['css'] ); ?>"
+								value="<?php echo esc_attr( $option_value ); ?>"
+								class="<?php echo esc_attr( $value['class'] ); ?>"
+								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
+								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								/><?php echo esc_html( $value['suffix'] ); ?> <?php echo wp_kses_post( $description ); ?>
+								<a href="<?php echo esc_url( RS_FEATURED_IMAGE_PLUGIN_PRO_URL . '/?utm_source=plugin&utm_medium=referral&utm_campaign=settings' ); ?>" target="_blank"><?php echo esc_html__( 'Checkout Pro now', 'really-simple-featured-image' ); ?></a>
+						</td>
+					</tr>
+					<?php
+					break;
 				case 'button':
 					$option_value = $value['value'];
 					?>
