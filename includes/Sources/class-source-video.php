@@ -196,6 +196,27 @@ class Source_Video {
 	}
 
 	/**
+	 * Get video data by host and ID.
+	 *
+	 * @param string $host Video host (e.g., 'youtube', 'vimeo', 'dailymotion').
+	 * @param string $video_id Video ID.
+	 *
+	 * @return array Video data array.
+	 */
+	public static function get_video_data_by_host_and_id( string $host, string $video_id ) {
+		switch ( $host ) {
+			case 'youtube':
+				return Youtube_Video::get_data_by_id( $video_id );
+			case 'vimeo':
+				return Vimeo_Video::get_data_by_id( $video_id );
+			case 'dailymotion':
+				return Dailymotion_Video::get_data_by_id( $video_id );
+			default:
+				return array();
+		}
+	}
+
+	/**
 	 * Set featured image from extracted video data.
 	 *
 	 * @param int   $post_id Post ID.
@@ -210,23 +231,10 @@ class Source_Video {
 		$thumbnail_url = '';
 
 		// Use the first found video URL.
-		foreach ( $video_urls as $video_data ) {
-			$video_id = $video_data['id'];
+		foreach ( $video_urls as $video_url ) {
+			$video_id = $video_url['id'];
 
-			switch ( $video_data['host'] ) {
-				case 'youtube':
-					$video_data = Youtube_Video::get_data_by_id( $video_id );
-					break;
-				case 'vimeo':
-					$video_data = Vimeo_Video::get_data_by_id( $video_id );
-					break;
-				case 'dailymotion':
-					$video_data = Dailymotion_Video::get_data_by_id( $video_id );
-					break;
-				default:
-					$video_data = array();
-					break;
-			}
+			$video_data = self::get_video_data_by_host_and_id( $video_url['host'], $video_id );
 
 			// If no video data, continue to next.
 			$thumbnail_url = $video_data['thumbnail_url'] ?? '';
