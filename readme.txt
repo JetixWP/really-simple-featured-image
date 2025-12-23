@@ -3,7 +3,7 @@ Contributors: jetixwp, lushkant
 Requires at least: 6.0
 Requires PHP: 8.0
 Tested up to: 6.9
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 Tags: featured image, automatic featured image, featured image from video, featured image from video thumbnail
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -59,6 +59,12 @@ If the image does not already exist in your media library, the plugin downloads 
 1. Settings page view.
 
 == Changelog ==
+
+= 1.0.1 =
+* Add PROMO settings
+* Add base rollback feature
+* Update settings view
+* Other minor changes
 
 = 1.0.0 =
 * Initial release
