@@ -1,0 +1,270 @@
+# Copyright (C) 2025 JetixWP Plugins
+# This file is distributed under the GPL2.
+msgid ""
+msgstr ""
+"Project-Id-Version: Really Simple Featured Image 1.0.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/really-simple-featured-image\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-12-23T15:50:08+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: really-simple-featured-image\n"
+
+#. Plugin Name of the plugin
+#: really-simple-featured-image.php
+#: includes/Settings/Views/html-admin-settings.php:28
+msgid "Really Simple Featured Image"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: really-simple-featured-image.php
+msgid "https://github.com/JetixWP/really-simple-featured-image"
+msgstr ""
+
+#. Description of the plugin
+#: really-simple-featured-image.php
+msgid "Automatically set the featured image from Image or Youtube, Vimeo, Dailymotion video in content."
+msgstr ""
+
+#. Author of the plugin
+#: really-simple-featured-image.php
+msgid "JetixWP Plugins"
+msgstr ""
+
+#. Author URI of the plugin
+#: really-simple-featured-image.php
+msgid "https://jetixwp.com"
+msgstr ""
+
+#: includes/class-plugin.php:138
+msgid "Settings"
+msgstr ""
+
+#: includes/Featuresets/rollback/class-rollback-downgrader-skin.php:32
+msgid "Rolling back plugin…"
+msgstr ""
+
+#: includes/Featuresets/rollback/class-rollback-downgrader-skin.php:74
+msgid "Rollback failed during installation."
+msgstr ""
+
+#: includes/Featuresets/rollback/class-rollback-downgrader-skin.php:85
+msgid "Rollback complete. The plugin files have been restored."
+msgstr ""
+
+#: includes/Featuresets/rollback/class-rollback-downgrader-skin.php:90
+msgid "Go to Plugins page"
+msgstr ""
+
+#: includes/Featuresets/rollback/class-rollbacker.php:153
+msgid "Rollback to Previous Version"
+msgstr ""
+
+#: includes/Settings/class-admin-settings.php:75
+msgid "Your settings have been saved."
+msgstr ""
+
+#: includes/Settings/class-admin-settings.php:148
+msgid "The changes you made will be lost if you navigate away from this page."
+msgstr ""
+
+#: includes/Settings/class-admin-settings.php:149
+msgid "Select Thumbnail Image"
+msgstr ""
+
+#: includes/Settings/class-admin-settings.php:150
+msgid "Use this image"
+msgstr ""
+
+#: includes/Settings/class-admin-settings.php:278
+#: includes/Settings/class-admin-settings.php:345
+msgid "Pro"
+msgstr ""
+
+#: includes/Settings/class-admin-settings.php:279
+#: includes/Settings/class-admin-settings.php:420
+#: includes/Settings/class-admin-settings.php:539
+msgid "Checkout Pro now"
+msgstr ""
+
+#: includes/Settings/class-admin-settings.php:570
+#: includes/Settings/class-admin-settings.php:598
+msgid "Change Image"
+msgstr ""
+
+#: includes/Settings/class-admin-settings.php:571
+msgid "Revert to Default"
+msgstr ""
+
+#: includes/Settings/class-admin-settings.php:725
+#: includes/Settings/class-admin-settings.php:790
+msgid "Toggle"
+msgstr ""
+
+#: includes/Settings/class-admin-settings.php:828
+msgid "Copy"
+msgstr ""
+
+#: includes/Settings/class-register-settings.php:45
+msgctxt "Page title"
+msgid "JetixWP Plugins"
+msgstr ""
+
+#: includes/Settings/class-register-settings.php:46
+msgctxt "Menu title"
+msgid "JetixWP"
+msgstr ""
+
+#: includes/Settings/class-register-settings.php:59
+msgid "Really Simple Featured Image Settings"
+msgstr ""
+
+#: includes/Settings/class-register-settings.php:60
+msgid "Featured Image"
+msgstr ""
+
+#: includes/Settings/Tabs/class-general.php:24
+msgid "Source"
+msgstr ""
+
+#: includes/Settings/Tabs/class-general.php:68
+msgid "Automatic Featured Image Source"
+msgstr ""
+
+#: includes/Settings/Tabs/class-general.php:69
+msgid "Choose the default source for automatic featured images. Once set we will fetch images from this source when no featured image is set and set it for you."
+msgstr ""
+
+#: includes/Settings/Tabs/class-general.php:72
+msgid "Enable Automatic Images"
+msgstr ""
+
+#: includes/Settings/Tabs/class-general.php:76
+msgid "Once ticked, automatic featured images will be set for enabled CPTs."
+msgstr ""
+
+#: includes/Settings/Tabs/class-general.php:79
+msgid "Default Source"
+msgstr ""
+
+#: includes/Settings/Tabs/class-general.php:90
+msgctxt "settings title"
+msgid "Enable Post Types Support"
+msgstr ""
+
+#: includes/Settings/Tabs/class-general.php:91
+msgid "Please select the post types you wish to enable automatic featured image support at."
+msgstr ""
+
+#: includes/Settings/Tabs/class-image.php:24
+msgid "Image in Content"
+msgstr ""
+
+#: includes/Settings/Tabs/class-image.php:41
+msgid "Scan Images in Content"
+msgstr ""
+
+#: includes/Settings/Tabs/class-image.php:42
+msgid "Settings responsible for scanning images within post content to set as featured images."
+msgstr ""
+
+#: includes/Settings/Tabs/class-image.php:55
+#: includes/Settings/Tabs/class-video.php:55
+msgid "Scan Content Length (Characters)"
+msgstr ""
+
+#: includes/Settings/Tabs/class-image.php:56
+msgid "Set the maximum number of characters to scan/read from post content when searching for images to set as the featured image. Increasing this value may impact performance on large posts."
+msgstr ""
+
+#: includes/Settings/Tabs/class-image.php:62
+msgid "Image Position in Content"
+msgstr ""
+
+#: includes/Settings/Tabs/class-image.php:63
+msgid "Set which image position in the content to use as the featured image. For example, setting this to Second Image will use the 2nd image found in the content to generate thumbnail and set as the featured image."
+msgstr ""
+
+#: includes/Settings/Tabs/class-image.php:68
+msgid "First Image"
+msgstr ""
+
+#: includes/Settings/Tabs/class-image.php:69
+msgid "Second Image"
+msgstr ""
+
+#: includes/Settings/Tabs/class-image.php:70
+msgid "Second Last Image"
+msgstr ""
+
+#: includes/Settings/Tabs/class-image.php:71
+msgid "Last Image"
+msgstr ""
+
+#: includes/Settings/Tabs/class-video.php:24
+msgid "Video in Content"
+msgstr ""
+
+#: includes/Settings/Tabs/class-video.php:41
+msgid "Scan Videos in Content"
+msgstr ""
+
+#: includes/Settings/Tabs/class-video.php:42
+msgid "Settings responsible for scanning videos within post content to use to generate and set featured images."
+msgstr ""
+
+#: includes/Settings/Tabs/class-video.php:56
+msgid "Set the maximum number of characters to scan/read from post content when searching for videos to set as the featured image. Increasing this value may impact performance on large posts."
+msgstr ""
+
+#: includes/Settings/Tabs/class-video.php:62
+msgid "Video Position in Content"
+msgstr ""
+
+#: includes/Settings/Tabs/class-video.php:63
+msgid "Set which video position in the content to use as the featured image. For example, setting this to Second Video will use the 2nd video found in the content to generate thumbnail and set as the featured image."
+msgstr ""
+
+#: includes/Settings/Tabs/class-video.php:68
+msgid "First Video"
+msgstr ""
+
+#: includes/Settings/Tabs/class-video.php:69
+msgid "Second Video"
+msgstr ""
+
+#: includes/Settings/Tabs/class-video.php:70
+msgid "Second Last Video"
+msgstr ""
+
+#: includes/Settings/Tabs/class-video.php:71
+msgid "Last Video"
+msgstr ""
+
+#: includes/Settings/Views/html-admin-settings.php:68
+msgid "Save changes"
+msgstr ""
+
+#: includes/Settings/Views/html-admin-settings.php:93
+msgid "Your Email"
+msgstr ""
+
+#: includes/Settings/Views/html-admin-settings.php:94
+msgid "First Name"
+msgstr ""
+
+#: includes/Settings/Views/html-admin-settings.php:95
+msgid "🚀 Send me the coupon"
+msgstr ""
+
+#: includes/Sources/class-register-sources.php:26
+msgid "Image in Post Content"
+msgstr ""
+
+#: includes/Sources/class-register-sources.php:27
+msgid "Video in Post Content"
+msgstr ""
