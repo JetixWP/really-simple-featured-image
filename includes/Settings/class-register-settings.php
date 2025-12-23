@@ -50,12 +50,14 @@ class Register_Settings {
 				$menu_icon,
 				30
 			);
+
+			add_action( 'admin_enqueue_scripts', array( $this, 'hide_freemius_submenus' ) );
 		}
 
 		add_submenu_page(
 			$primary_slug,
 			__( 'Really Simple Featured Image Settings', 'really-simple-featured-image' ),
-			__( 'Auto Featured Image', 'really-simple-featured-image' ),
+			__( 'Featured Image', 'really-simple-featured-image' ),
 			'manage_options',
 			'rs-featured-image-settings',
 			array( $this, 'settings_page' )
@@ -64,6 +66,20 @@ class Register_Settings {
 		// Remove duplicate menu hack.
 		// Note: It needs to go after the above add_submenu_page call.
 		remove_submenu_page( $primary_slug, $primary_slug );
+	}
+
+
+	/**
+	 * Hide Freemius submenus if they exist.
+	 *
+	 * @return void
+	 */
+	public function hide_freemius_submenus() {
+		// Enqueue a core admin style as a handle for inline CSS.
+		wp_enqueue_style( 'wp-admin' );
+
+		$custom_css = '.toplevel_page_jetixwp .wp-submenu li a[href*="-addons"] { display: none !important; }';
+		wp_add_inline_style( 'wp-admin', $custom_css );
 	}
 
 	/**
