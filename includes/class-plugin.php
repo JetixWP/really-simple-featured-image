@@ -9,6 +9,7 @@ namespace RS_Featured_Image;
 
 use RS_Featured_Image\Settings\Register_Settings;
 use RS_Featured_Image\Sources\Register_Sources;
+use RS_Featured_Image\Featuresets\Register_Featuresets as Featuresets;
 
 /**
  * Class RS_Featured_Image\Plugin.
@@ -34,6 +35,13 @@ final class Plugin {
 	 * @var Register_Settings;
 	 */
 	public $settings_manager;
+
+	/**
+	 * Featuresets instance.
+	 *
+	 * @var $featuresets_provider
+	 */
+	public $featuresets_provider;
 
 	/**
 	 * Sources Manager.
@@ -83,6 +91,9 @@ final class Plugin {
 		// Register Settings.
 		$this->settings_manager = Register_Settings::get_instance();
 
+		// Register Featuresets.
+		$this->featuresets_provider = Featuresets::get_instance();
+
 		// Register Sources.
 		$this->sources_manager = Register_Sources::get_instance();
 
@@ -104,6 +115,9 @@ final class Plugin {
 		require_once RS_FEATURED_IMAGE_PLUGIN_DIR . 'includes/helpers.php';
 		require_once RS_FEATURED_IMAGE_PLUGIN_DIR . 'includes/class-options.php';
 		require_once RS_FEATURED_IMAGE_PLUGIN_DIR . 'includes/Settings/class-register-settings.php';
+
+		// Frontend loaders.
+		require_once RS_FEATURED_IMAGE_PLUGIN_DIR . 'includes/Featuresets/class-register-featuresets.php';
 
 		// Sources.
 		require_once RS_FEATURED_IMAGE_PLUGIN_DIR . 'includes/Sources/class-register-sources.php';
