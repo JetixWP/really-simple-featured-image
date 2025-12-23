@@ -23,7 +23,7 @@ define( 'RS_FEATURED_IMAGE_PLUGIN_FILE', __FILE__ );
 define( 'RS_FEATURED_IMAGE_PLUGIN_URL', plugin_dir_url( RS_FEATURED_IMAGE_PLUGIN_FILE ) );
 define( 'RS_FEATURED_IMAGE_PLUGIN_DIR', plugin_dir_path( RS_FEATURED_IMAGE_PLUGIN_FILE ) );
 define( 'RS_FEATURED_IMAGE_PLUGIN_BASE', plugin_basename( RS_FEATURED_IMAGE_PLUGIN_FILE ) );
-define( 'RS_FEATURED_IMAGE_PLUGIN_PRO_URL', '' );
+define( 'RS_FEATURED_IMAGE_PLUGIN_PRO_URL', 'https://jetixwp.com/plugins/really-simple-featured-image' );
 
 // Third party dependencies.
 $vendor_file = __DIR__ . '/vendor/autoload.php';
@@ -41,19 +41,19 @@ require_once RS_FEATURED_IMAGE_PLUGIN_DIR . 'includes/class-updater.php';
 /**
  * Initialize Freemius SDK.
  */
-if ( ! function_exists( 'rsfi_fs' ) ) {
+if ( ! function_exists( 'rs_featured_image_fs' ) ) {
 	/**
 	 * Create a helper function for easy SDK access.
 	 */
-	function rsfi_fs() {
-		global $rsfi_fs;
+	function rs_featured_image_fs() {
+		global $rs_featured_image_fs;
 
 		if ( ! function_exists( 'fs_dynamic_init' ) && file_exists( __DIR__ . '/vendor/freemius/wordpress-sdk/start.php' ) ) {
 			require_once __DIR__ . '/vendor/freemius/wordpress-sdk/start.php';
 		}
 
-		if ( ! isset( $rsfi_fs ) && function_exists( 'fs_dynamic_init' ) ) {
-			$rsfi_fs = fs_dynamic_init(
+		if ( ! isset( $rs_featured_image_fs ) && function_exists( 'fs_dynamic_init' ) ) {
+			$rs_featured_image_fs = fs_dynamic_init(
 				array(
 					'id'             => '22490',
 					'slug'           => 'really-simple-featured-image',
@@ -76,13 +76,13 @@ if ( ! function_exists( 'rsfi_fs' ) ) {
 			);
 		}
 
-		return $rsfi_fs;
+		return $rs_featured_image_fs;
 	}
 
 	// Init Freemius.
-	rsfi_fs();
+	rs_featured_image_fs();
 	// Signal that SDK was initiated.
-	do_action( 'rsfi_fs_loaded' );
+	do_action( 'rs_featured_image_fs_loaded' );
 }
 
 /**

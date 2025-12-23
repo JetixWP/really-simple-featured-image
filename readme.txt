@@ -8,7 +8,7 @@ Tags: featured image, automatic featured image, featured image from video, featu
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Automatically assigns missing featured images from content images or video thumbnails for posts, pages and CPTs.
+Automatically set missing featured images from video or image inside content for Posts, Pages and CPTs.
 
 == Description ==
 
