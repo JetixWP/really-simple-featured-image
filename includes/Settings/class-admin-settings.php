@@ -48,6 +48,8 @@ class Admin_Settings {
 			include_once RS_FEATURED_IMAGE_PLUGIN_DIR . 'includes/Settings/class-settings-page.php';
 
 			$settings[] = include 'Tabs/class-general.php';
+			$settings[] = include 'Tabs/class-image.php';
+			$settings[] = include 'Tabs/class-video.php';
 
 			$settings = apply_filters( 'rs_featured_image_get_settings_pages', $settings );
 
