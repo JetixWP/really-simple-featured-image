@@ -89,13 +89,13 @@ class General extends Settings_Page {
 			array(
 				'title' => esc_html_x( 'Enable Post Types Support', 'settings title', 'really-simple-featured-image' ),
 				'desc'  => __( 'Please select the post types you wish to enable automatic featured image support at.', 'really-simple-featured-image' ),
-				'class' => 'rs_featured_image-enable-post-types',
+				'class' => 'rs-featured-image-enable-post-types',
 				'type'  => 'content',
-				'id'    => 'rs_featured_image-enable-post-types',
+				'id'    => 'rs-featured-image-enable-post-types',
 			),
 			array(
 				'type' => 'title',
-				'id'   => 'rs_featured_image_post_types_title',
+				'id'   => 'rs-featured-image-post-types-title',
 			),
 			array(
 				'title'   => '',
@@ -111,25 +111,11 @@ class General extends Settings_Page {
 		);
 
 		$settings = apply_filters(
-			'rs_featured_image_general_settings',
+			'rs_featured_image_' . $this->id . '_settings',
 			$settings
 		);
 
 		return apply_filters( 'rs_featured_image_get_settings_' . $this->id, $settings );
-	}
-
-	/**
-	 * Save settings.
-	 */
-	public function save() {
-		global $current_section;
-
-		$settings = $this->get_settings( $current_section );
-
-		Admin_Settings::save_fields( $settings );
-		if ( $current_section ) {
-			do_action( 'rs_featured_image_update_options_' . $this->id . '_' . $current_section );
-		}
 	}
 }
 
