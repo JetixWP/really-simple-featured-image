@@ -28,6 +28,7 @@ class Source_Content {
 	public function __construct() {
 		add_action( 'save_post', array( $this, 'check_content_for_images' ), 10, 2 );
 		add_action( 'deleted_post_meta', array( $this, 'handle_deleted_thumbnail' ), 20, 3 );
+		add_action( 'rs_featured_image_setting_featured_image_from_content', array( __CLASS__, 'set_featured_image_from_content' ), 10, 2 );
 	}
 
 	/**
@@ -87,23 +88,14 @@ class Source_Content {
 			return;
 		}
 
-		$attachment_id = '';
+		// Trigger actions before, during, and after setting the featured image.
+		do_action( 'rs_featured_image_before_setting_featured_image_from_content', $post_id, $image_urls );
 
-		// Use the first found image URL.
-		foreach ( $image_urls as $image_url ) {
-			// Try to set featured image from existing attachment first.
-			$attachment_id = set_featured_image_from_existing_image( $post_id, $image_url );
+		// Triggers the actual setting of the featured image.
+		do_action( 'rs_featured_image_setting_featured_image_from_content', $post_id, $image_urls );
 
-			// If no attachment found, try to set from URL.
-			if ( ! $attachment_id ) {
-				$attachment_id = set_featured_image_from_url( $post_id, $image_url );
-			}
-
-			// Break loop if we have successfully set a featured image.
-			if ( ! empty( $attachment_id ) ) {
-				break;
-			}
-		}
+		// Action after setting the featured image.
+		do_action( 'rs_featured_image_after_setting_featured_image_from_content', $post_id, $image_urls );
 	}
 
 	/**
@@ -247,6 +239,37 @@ class Source_Content {
 
 		// Thumbnail was explicitly removed by user.
 		$this->check_content_for_images( $post_id, get_post( $post_id ) );
+	}
+
+	/**
+	 * Set featured image from content image URLs.
+	 *
+	 * @param int   $post_id Post ID.
+	 * @param array $image_urls Array of image URLs.
+	 */
+	public static function set_featured_image_from_content( $post_id, $image_urls ) {
+		// If no image URLs, return early.
+		if ( empty( $image_urls ) ) {
+			return;
+		}
+
+		$attachment_id = '';
+
+		// Use the first found image URL.
+		foreach ( $image_urls as $image_url ) {
+			// Try to set featured image from existing attachment first.
+			$attachment_id = set_featured_image_from_existing_image( $post_id, $image_url );
+
+			// If no attachment found, try to set from URL.
+			if ( ! $attachment_id ) {
+				$attachment_id = set_featured_image_from_url( $post_id, $image_url );
+			}
+
+			// Break loop if we have successfully set a featured image.
+			if ( ! empty( $attachment_id ) ) {
+				break;
+			}
+		}
 	}
 }
 

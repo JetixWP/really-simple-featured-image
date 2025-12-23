@@ -31,6 +31,9 @@ class Source_Video {
 
 		// Hook into save_post to check for videos.
 		add_action( 'save_post', array( $this, 'check_content_for_videos' ), 10, 2 );
+
+		// Hook into the featured image setting action.
+		add_action( 'rs_featured_image_setting_featured_image_from_content_video', array( __CLASS__, 'set_featured_image_from_videos' ), 10, 2 );
 	}
 
 	/**
@@ -70,6 +73,7 @@ class Source_Video {
 		}
 
 		// Prevent trying to assign when trashing or untrashing posts in the list screen.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_REQUEST['action'] ) && in_array( $_REQUEST['action'], array( 'trash', 'untrash', 'add-menu-item' ), true ) ) {
 			return;
 		}
@@ -98,43 +102,14 @@ class Source_Video {
 			return;
 		}
 
-		$thumbnail_url = '';
+		// Trigger actions before, during, and after setting the featured image.
+		do_action( 'rs_featured_image_before_setting_featured_image_from_content_video', $post_id, $video_urls );
 
-		// Use the first found video URL.
-		foreach ( $video_urls as $video_data ) {
-			$video_id = $video_data['id'];
+		// Triggers the actual setting of the featured image.
+		do_action( 'rs_featured_image_setting_featured_image_from_content_video', $post_id, $video_urls );
 
-			switch ( $video_data['host'] ) {
-				case 'youtube':
-					$video_data = Youtube_Video::get_data_by_id( $video_id );
-					break;
-				case 'vimeo':
-					$video_data = Vimeo_Video::get_data_by_id( $video_id );
-					break;
-				case 'dailymotion':
-					$video_data = Dailymotion_Video::get_data_by_id( $video_id );
-					break;
-				default:
-					$video_data = array();
-					break;
-			}
-
-			// If no video data, continue to next.
-			$thumbnail_url = $video_data['thumbnail_url'] ?? '';
-
-			if ( empty( $thumbnail_url ) ) {
-				continue;
-			}
-
-			$video_title = $video_data['title'] ?? '';
-
-			// Try to set from URL.
-			$attachment_id = set_featured_image_from_url( $post_id, $thumbnail_url, $video_title );
-
-			if ( ! empty( $attachment_id ) ) {
-				break;
-			}
-		}
+		// Action after setting the featured image.
+		do_action( 'rs_featured_image_after_setting_featured_image_from_content_video', $post_id, $video_urls );
 	}
 
 	/**
@@ -218,6 +193,57 @@ class Source_Video {
 			'vimeo'       => '#(?:https?:\/\/)?(?:www\.)?(?:vimeo\.com\/|player\.vimeo\.com\/video\/)(\d+)#i',
 			'dailymotion' => '#(?:https?:\/\/)?(?:www\.)?(?:dailymotion\.com\/video\/|dai\.ly\/)([a-zA-Z0-9]+)#i',
 		);
+	}
+
+	/**
+	 * Set featured image from extracted video data.
+	 *
+	 * @param int   $post_id Post ID.
+	 * @param array $video_urls Array of video urls.
+	 */
+	public static function set_featured_image_from_videos( int $post_id, array $video_urls ) {
+		// If no video data, return early.
+		if ( empty( $video_urls ) ) {
+			return;
+		}
+
+		$thumbnail_url = '';
+
+		// Use the first found video URL.
+		foreach ( $video_urls as $video_data ) {
+			$video_id = $video_data['id'];
+
+			switch ( $video_data['host'] ) {
+				case 'youtube':
+					$video_data = Youtube_Video::get_data_by_id( $video_id );
+					break;
+				case 'vimeo':
+					$video_data = Vimeo_Video::get_data_by_id( $video_id );
+					break;
+				case 'dailymotion':
+					$video_data = Dailymotion_Video::get_data_by_id( $video_id );
+					break;
+				default:
+					$video_data = array();
+					break;
+			}
+
+			// If no video data, continue to next.
+			$thumbnail_url = $video_data['thumbnail_url'] ?? '';
+
+			if ( empty( $thumbnail_url ) ) {
+				continue;
+			}
+
+			$video_title = $video_data['title'] ?? '';
+
+			// Try to set from URL.
+			$attachment_id = set_featured_image_from_url( $post_id, $thumbnail_url, $video_title );
+
+			if ( ! empty( $attachment_id ) ) {
+				break;
+			}
+		}
 	}
 }
 
