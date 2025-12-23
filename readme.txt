@@ -63,6 +63,7 @@ If the image does not already exist in your media library, the plugin downloads 
 = 1.0.1 =
 * Add PROMO settings
 * Add base rollback feature
+* Add languages .pot file
 * Update settings view
 * Other minor changes
 
