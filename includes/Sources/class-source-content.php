@@ -253,22 +253,49 @@ class Source_Content {
 			return;
 		}
 
+		$options = Options::get_instance();
+
+		$image_content_position = $options->get( 'image_content_position', 'first' );
+
 		$attachment_id = '';
 
-		// Use the first found image URL.
-		foreach ( $image_urls as $image_url ) {
-			// Try to set featured image from existing attachment first.
-			$attachment_id = set_featured_image_from_existing_image( $post_id, $image_url );
+		if ( 'first' === $image_content_position ) {
+			// Use the first found image URL.
+			foreach ( $image_urls as $image_url ) {
+				// Try to set featured image from existing attachment first.
+				$attachment_id = set_featured_image_from_existing_image( $post_id, $image_url );
 
-			// If no attachment found, try to set from URL.
-			if ( ! $attachment_id ) {
-				$attachment_id = set_featured_image_from_url( $post_id, $image_url );
+				// If no attachment found, try to set from URL.
+				if ( ! $attachment_id ) {
+					$attachment_id = set_featured_image_from_url( $post_id, $image_url );
+				}
+
+				// Break loop if we have successfully set a featured image.
+				if ( ! empty( $attachment_id ) ) {
+					break;
+				}
+			}
+		} elseif ( 'second' === $image_content_position ) {
+			$image_url = $image_urls[1] ?? '';
+
+			if ( empty( $image_url ) ) {
+				return;
 			}
 
-			// Break loop if we have successfully set a featured image.
-			if ( ! empty( $attachment_id ) ) {
-				break;
+			// Use the second image URL.
+			$attachment_id = set_featured_image_from_url( $post_id, $image_url );
+		} elseif ( 'last-second' === $image_content_position ) {
+			$image_url = $image_urls[ count( $image_urls ) - 2 ];
+
+			if ( empty( $image_url ) ) {
+				return;
 			}
+
+			// Use the last second image URL.
+			$attachment_id = set_featured_image_from_url( $post_id, $image_url );
+		} elseif ( 'last' === $image_content_position ) {
+			// Use the last image URL.
+			$attachment_id = set_featured_image_from_url( $post_id, end( $image_urls ) );
 		}
 	}
 }
