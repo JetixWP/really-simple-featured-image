@@ -60,6 +60,11 @@ If the image does not already exist in your media library, the plugin downloads 
 
 == Changelog ==
 
+= 1.0.2 =
+* Added Image and Video options
+* PCP improvements
+* Other minor changes
+
 = 1.0.1 =
 * Add PROMO settings
 * Add base rollback feature

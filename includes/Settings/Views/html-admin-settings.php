@@ -11,8 +11,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$tab_exists        = isset( $tabs[ $current_tab ] ) || has_action( 'rs_featured_image_sections_' . $current_tab ) || has_action( 'rs_featured_image_settings_' . $current_tab ) || has_action( 'rs_featured_image_settings_tabs_' . $current_tab );
-$current_tab_label = isset( $tabs[ $current_tab ] ) ? $tabs[ $current_tab ] : '';
+/**
+ * Note for reviewer: This is a false positive! The variable $tab_exists is not a global variable. This is a template file which gets included inside Admin_Settings::output class method.
+ */
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+$tab_exists                                   = isset( $tabs[ $rs_featured_image_settings_current_tab ] ) || has_action( 'rs_featured_image_sections_' . $rs_featured_image_settings_current_tab ) || has_action( 'rs_featured_image_settings_' . $rs_featured_image_settings_current_tab ) || has_action( 'rs_featured_image_settings_tabs_' . $rs_featured_image_settings_current_tab );
+$rs_featured_image_settings_current_tab_label = isset( $tabs[ $rs_featured_image_settings_current_tab ] ) ? $tabs[ $rs_featured_image_settings_current_tab ] : '';
 
 global $current_user;
 
@@ -21,7 +25,7 @@ if ( ! $tab_exists ) {
 	exit;
 }
 ?>
-<div class="wrap rs-featured-image <?php echo esc_attr( $current_tab ); ?>">
+<div class="wrap rs-featured-image <?php echo esc_attr( $rs_featured_image_settings_current_tab ); ?>">
 	<div class="plugin-header">
 		<div class="plugin-header-wrap">
 			<div class="plugin-info">
@@ -43,8 +47,12 @@ if ( ! $tab_exists ) {
 				<nav class="nav-tab-wrapper rs-featured-image-nav-tab-wrapper">
 					<?php
 
+					/**
+					 * Note for reviewer: This is a false positive! The variables $slug & $label are not global variables. This is a template file which gets included inside Admin_Settings::output class method.
+					 */
+					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 					foreach ( $tabs as $slug => $label ) {
-						echo '<a href="' . esc_html( admin_url( 'admin.php?page=rs-featured-image-settings&tab=' . esc_attr( $slug ) ) ) . '" class="nav-tab ' . ( $current_tab === $slug ? 'nav-tab-active' : '' ) . '">' . esc_html( $label ) . '</a>';
+						echo '<a href="' . esc_html( admin_url( 'admin.php?page=rs-featured-image-settings&tab=' . esc_attr( $slug ) ) ) . '" class="nav-tab ' . ( $rs_featured_image_settings_current_tab === $slug ? 'nav-tab-active' : '' ) . '">' . esc_html( $label ) . '</a>';
 					}
 
 					do_action( 'rs_featured_image_settings_tabs' );
@@ -53,15 +61,15 @@ if ( ! $tab_exists ) {
 				</nav>
 			</div>
 			<div class="tab-content">
-				<form method="<?php echo esc_attr( apply_filters( 'rs_featured_image_settings_form_method_tab_' . $current_tab, 'post' ) ); ?>" id="mainform" action="" enctype="multipart/form-data">
+				<form method="<?php echo esc_attr( apply_filters( 'rs_featured_image_settings_form_method_tab_' . $rs_featured_image_settings_current_tab, 'post' ) ); ?>" id="mainform" action="" enctype="multipart/form-data">
 					<div class="content">
-						<h1 class="screen-reader-text"><?php echo esc_html( $current_tab_label ); ?></h1>
+						<h1 class="screen-reader-text"><?php echo esc_html( $rs_featured_image_settings_current_tab_label ); ?></h1>
 						<?php
-						do_action( 'rs_featured_image_sections_' . $current_tab );
+						do_action( 'rs_featured_image_sections_' . $rs_featured_image_settings_current_tab );
 
 						self::show_messages();
 
-						do_action( 'rs_featured_image_settings_' . $current_tab );
+						do_action( 'rs_featured_image_settings_' . $rs_featured_image_settings_current_tab );
 						?>
 						<p class="submit">
 							<?php if ( empty( $GLOBALS['hide_save_button'] ) ) : ?>

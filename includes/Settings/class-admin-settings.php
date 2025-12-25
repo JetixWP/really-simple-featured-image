@@ -63,13 +63,13 @@ class Admin_Settings {
 	 * Save the settings.
 	 */
 	public static function save() {
-		global $current_tab;
+		global $rs_featured_image_settings_current_tab;
 
 		check_admin_referer( 'rs-featured-image-settings' );
 
 		// Trigger actions.
-		do_action( 'rs_featured_image_settings_save_' . $current_tab );
-		do_action( 'rs_featured_image_update_options_' . $current_tab );
+		do_action( 'rs_featured_image_settings_save_' . $rs_featured_image_settings_current_tab );
+		do_action( 'rs_featured_image_update_options_' . $rs_featured_image_settings_current_tab );
 		do_action( 'rs_featured_image_update_options' );
 
 		self::add_message( __( 'Your settings have been saved.', 'really-simple-featured-image' ) );
@@ -120,7 +120,7 @@ class Admin_Settings {
 	 * Handles the display of the main ReallySimpleFreeShipping settings page in admin.
 	 */
 	public static function output() {
-		global $current_section, $current_tab;
+		global $rs_featured_image_settings_current_section, $rs_featured_image_settings_current_tab;
 
 		do_action( 'rs_featured_image_settings_start' );
 

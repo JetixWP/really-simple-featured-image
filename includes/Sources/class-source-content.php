@@ -60,6 +60,7 @@ class Source_Content {
 		}
 
 		// Prevent trying to assign when trashing or untrashing posts in the list screen.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_REQUEST['action'] ) && in_array( $_REQUEST['action'], array( 'trash', 'untrash', 'add-menu-item' ), true ) ) {
 			return;
 		}

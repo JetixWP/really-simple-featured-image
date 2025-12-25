@@ -3,7 +3,7 @@
         'name' => 'jetixwp/really-simple-featured-image',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '304265768444c46de48510d8c97cb8e1d377c1d0',
+        'reference' => 'ea7dca31aa0dd56201552ec0056ecc9c4eb2ada8',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'jetixwp/really-simple-featured-image' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '304265768444c46de48510d8c97cb8e1d377c1d0',
+            'reference' => 'ea7dca31aa0dd56201552ec0056ecc9c4eb2ada8',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

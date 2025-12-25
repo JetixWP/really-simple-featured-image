@@ -7,7 +7,8 @@
 
 namespace RS_Featured_Image\Settings;
 
-use RS_Featured_Image\Options;
+defined( 'ABSPATH' ) || exit;
+
 use RS_Featured_Image\Utils\Has_Instance;
 
 /**
@@ -129,7 +130,7 @@ class Register_Settings {
 	 * @return void
 	 */
 	public function save_settings() {
-		global $current_tab, $current_section;
+		global $rs_featured_image_settings_current_tab, $rs_featured_image_settings_current_section;
 
 		// We should only save on the settings page.
 		if ( ! is_admin() || ! isset( $_GET['page'] ) || 'rs-featured-image-settings' !== $_GET['page'] ) {
@@ -145,15 +146,15 @@ class Register_Settings {
 		Admin_Settings::get_settings_pages();
 
 		// Get current tab/section.
-		$current_tab     = empty( $_GET['tab'] ) ? 'general' : sanitize_title( wp_unslash( $_GET['tab'] ) );
-		$current_section = empty( $_REQUEST['section'] ) ? '' : sanitize_title( wp_unslash( $_REQUEST['section'] ) );
-		$nonce           = isset( $_POST['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ) : '';
+		$rs_featured_image_settings_current_tab     = empty( $_GET['tab'] ) ? 'general' : sanitize_title( wp_unslash( $_GET['tab'] ) );
+		$rs_featured_image_settings_current_section = empty( $_REQUEST['section'] ) ? '' : sanitize_title( wp_unslash( $_REQUEST['section'] ) );
+		$nonce                                      = isset( $_POST['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ) : '';
 
 		// Save settings if data has been posted.
 		if ( wp_verify_nonce( $nonce, 'rs-featured-image-settings' ) ) {
-			if ( '' !== $current_section && apply_filters( "rs_featured_image_save_settings_{$current_tab}_{$current_section}", ! empty( $_POST['save'] ) ) ) {
+			if ( '' !== $rs_featured_image_settings_current_section && apply_filters( "rs_featured_image_save_settings_{$rs_featured_image_settings_current_tab}_{$rs_featured_image_settings_current_section}", ! empty( $_POST['save'] ) ) ) {
 				Admin_Settings::save();
-			} elseif ( '' === $current_section && apply_filters( "rs_featured_image_save_settings_{$current_tab}", ! empty( $_POST['save'] ) || isset( $_POST['rs_featured_image-license_activate'] ) ) ) {
+			} elseif ( '' === $rs_featured_image_settings_current_section && apply_filters( "rs_featured_image_save_settings_{$rs_featured_image_settings_current_tab}", ! empty( $_POST['save'] ) || isset( $_POST['rs_featured_image-license_activate'] ) ) ) {
 				Admin_Settings::save();
 			}
 		}

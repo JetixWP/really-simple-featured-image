@@ -18,7 +18,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'RS_FEATURED_IMAGE_VERSION', '1.0.1' );
+define( 'RS_FEATURED_IMAGE_VERSION', '1.0.2' );
 define( 'RS_FEATURED_IMAGE_PLUGIN_FILE', __FILE__ );
 define( 'RS_FEATURED_IMAGE_PLUGIN_URL', plugin_dir_url( RS_FEATURED_IMAGE_PLUGIN_FILE ) );
 define( 'RS_FEATURED_IMAGE_PLUGIN_DIR', plugin_dir_path( RS_FEATURED_IMAGE_PLUGIN_FILE ) );

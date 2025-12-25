@@ -53,11 +53,11 @@ class General extends Settings_Page {
 	/**
 	 * Get settings array.
 	 *
-	 * @param string $current_section Current section ID.
+	 * @param string $rs_featured_image_settings_current_section Current section ID.
 	 *
 	 * @return array
 	 */
-	public function get_settings( $current_section = '' ) {
+	public function get_settings( $rs_featured_image_settings_current_section = '' ) {
 		$post_types = $this->get_available_post_types();
 
 		$default_enabled_post_types = apply_filters(
