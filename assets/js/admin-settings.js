@@ -43,7 +43,7 @@
 			);
 
 			// Select all/none.
-			$( '.rsfa' ).on(
+			$( '.rs-featured-image' ).on(
 				'click',
 				'.select_all',
 				function() {
@@ -59,7 +59,7 @@
 				}
 			);
 
-			$( '.rsfa' ).on(
+			$( '.rs-featured-image' ).on(
 				'click',
 				'.select_none',
 				function() {

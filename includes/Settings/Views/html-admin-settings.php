@@ -73,42 +73,23 @@ if ( ! $tab_exists ) {
 				</form>
 
 				<div class="sidebar">
-					<?php if ( ! class_exists( '\RS_Featured_Image_Pro\Plugin' ) ) : ?>
-						<div class="upgrade-box">
-							<div>
-								<h3>🔥 &nbsp;Grab the PRO version with a Special discount</h3>
-								<p class="desc">Really Simple Featured Image PRO is available to support additional features while we continue to keep them maintained and updated. Add your email address and we will send you a special discount code for your PRO purchase.</p>
-							</div>
-							<div>
-								<p class="desc"><strong>A few key features included in the PRO plugin -</strong></p>
-								<ul>
-									<li>✅ <strong>Priority Support</strong></li>
-									<li>✅ <strong>Extended Automatic Featured Images</strong></li>
-									<li>✅ <strong>Automatic WooCommerce Product Gallery</strong></li>
-									<li>✅ <strong>Override Controls</strong></li>
-									<li><strong>and so much more...</strong></li>
-								</ul>
-							</div>
-							<form id="js-rs-featured-image-pro-request-discount" method="post">
-								<input required type="email" class="regular-text" name="email" value="<?php echo esc_attr( $current_user->user_email ); ?>" placeholder="<?php esc_attr_e( 'Your Email', 'really-simple-featured-image' ); ?>">
-								<input required type="text" class="regular-text" name="first_name" value="<?php echo esc_attr( $current_user->first_name ); ?>" placeholder="<?php esc_attr_e( 'First Name', 'really-simple-featured-image' ); ?>">
-								<input type="submit" class="button button-primary" style="width:100%" value="<?php esc_attr_e( '🚀 Send me the coupon', 'really-simple-featured-image' ); ?>" data-default-label="<?php esc_attr_e( '🚀 Send me the coupon', 'really-simple-featured-image' ); ?>">
-								<p class="rs-featured-image-pro-discount-response"><span></span></p>
-							</form>
-							<span class="separator">-- OR --</span>
-							<div class="peekaboo-section">
-								<a class="button button-primary" href="https://jetixwp.com/plugins/really-simple-featured-image?utm_campaign=settings-sidebar&utm_source=rs-featured-image-plugin" target="_blank">✨ Take a look at PRO</a>
-							</div>
-
-							<div>
-								<p><em>If you like our free plugin, you will absolutely love the PRO version. Thank you for using Really Simple Featured Image again, you are not just any supporter but truly the founders of our small business.</em></p>
-								<p><strong>Krishna Kant Chourasiya</strong>, Founder and Lead Developer</p>
-
-								<p><strong>Have questions?</strong> Send them at <a href="mailto:krishna@jetixwp.com">krishna@jetixwp.com</a>, and I will personally get back to you at the earliest :)</p>
-
-							</div>
+					<div class="help-box">
+						<div>
+							<h3>👋 Thank you for using our plugin!</h3>
+							<p class="desc">We are currently looking for user feedback to improve it further for most use cases. If you have something to suggest, please feel free to drop your request at - <a href="mailto:hello@jetixwp.com" target="_blank">hello@jetixwp.com</a>.</p>
 						</div>
-					<?php endif; ?>
+
+						<div>
+							<p class="desc">If you like this plugin, you will absolutely love our other plugins.</p>
+						</div>
+						<div>
+							<a class="button button-primary" href="https://jetixwp.com/plugins?utm_campaign=settings-sidebar&utm_source=rs_free_shipping-plugin" target="_blank">✨ View all Plugins</a>
+						</div>
+						<div>
+							<p><em>Thank you for using our Free Shipping addon for WooCommerce again, you are not just any supporter but truly the founders of our small but mighty product agency.</em></p>
+							<p><strong>Krishna</strong>, Founder and Lead Developer at JetixWP</p>
+						</div>
+					</div>
 
 					<?php do_action( 'rs_featured_image_extend_settings_sidebar' ); ?>
 				</div>
