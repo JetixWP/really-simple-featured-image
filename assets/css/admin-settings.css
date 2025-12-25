@@ -466,6 +466,7 @@ body.jetixwp_page_rs-featured-image-settings #wpbody-content > *:not(.wrap.rs-fe
 }
 
 .rs-featured-image .sidebar .upgrade-box,
+.rs-featured-image .sidebar .help-box,
 .rs-featured-image .notice-box {
 	background: #fff;
 	border: 1px solid #dcdcdc;
@@ -474,15 +475,19 @@ body.jetixwp_page_rs-featured-image-settings #wpbody-content > *:not(.wrap.rs-fe
 
 
 .rs-featured-image .sidebar .upgrade-box > *,
+.rs-featured-image .sidebar .help-box > *,
 .rs-featured-image .notice-box > * {
 	margin-bottom: 15px;
 }
 
 .rs-featured-image .sidebar .upgrade-box .desc,
+.rs-featured-image .sidebar .help-box .desc,
 .rs-featured-image .notice-box .desc {
 	font-size: 15px;
 }
 
+
+.rs-featured-image .sidebar .help-box .button.button-primary,
 .rs-featured-image .notice-box .button.button-primary {
 	font-size: 16px;
 	width: 100%;

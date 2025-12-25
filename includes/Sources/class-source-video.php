@@ -228,29 +228,80 @@ class Source_Video {
 			return;
 		}
 
+		$options = Options::get_instance();
+
+		$video_content_position = $options->get( 'video_content_position', 'first' );
+
 		$thumbnail_url = '';
 
-		// Use the first found video URL.
-		foreach ( $video_urls as $video_url ) {
-			$video_id = $video_url['id'];
+		if ( 'first' === $video_content_position ) {
+			// Use the first found video URL.
+			foreach ( $video_urls as $video_url ) {
+				$video_id = $video_url['id'];
 
-			$video_data = self::get_video_data_by_host_and_id( $video_url['host'], $video_id );
+				$video_data = self::get_video_data_by_host_and_id( $video_url['host'], $video_id );
 
-			// If no video data, continue to next.
-			$thumbnail_url = $video_data['thumbnail_url'] ?? '';
+				// If no video data, continue to next.
+				$thumbnail_url = $video_data['thumbnail_url'] ?? '';
 
-			if ( empty( $thumbnail_url ) ) {
-				continue;
+				if ( empty( $thumbnail_url ) ) {
+					continue;
+				}
+
+				$video_title = $video_data['title'] ?? '';
+
+				// Try to set from URL.
+				$attachment_id = set_featured_image_from_url( $post_id, $thumbnail_url, $video_title );
+
+				if ( ! empty( $attachment_id ) ) {
+					break;
+				}
+			}
+		} elseif ( 'second' === $video_content_position ) {
+			$video_url = $video_urls[1] ?? '';
+
+			if ( empty( $video_url ) ) {
+				return;
 			}
 
-			$video_title = $video_data['title'] ?? '';
+			$video_id = $video_url['id'];
+
+			$video_data    = self::get_video_data_by_host_and_id( $video_url['host'], $video_id );
+			$thumbnail_url = $video_data['thumbnail_url'] ?? '';
+			$video_title   = $video_data['title'] ?? '';
 
 			// Try to set from URL.
 			$attachment_id = set_featured_image_from_url( $post_id, $thumbnail_url, $video_title );
+		} elseif ( 'last-second' === $video_content_position ) {
+			$video_url = $video_urls[ count( $video_urls ) - 2 ] ?? '';
 
-			if ( ! empty( $attachment_id ) ) {
-				break;
+			if ( empty( $video_url ) ) {
+				return;
 			}
+
+			$video_id = $video_url['id'];
+
+			$video_data    = self::get_video_data_by_host_and_id( $video_url['host'], $video_id );
+			$thumbnail_url = $video_data['thumbnail_url'] ?? '';
+			$video_title   = $video_data['title'] ?? '';
+
+			// Try to set from URL.
+			$attachment_id = set_featured_image_from_url( $post_id, $thumbnail_url, $video_title );
+		} elseif ( 'last' === $video_content_position ) {
+			$video_url = end( $video_urls );
+
+			if ( empty( $video_url ) ) {
+				return;
+			}
+
+			$video_id = $video_url['id'];
+
+			$video_data    = self::get_video_data_by_host_and_id( $video_url['host'], $video_id );
+			$thumbnail_url = $video_data['thumbnail_url'] ?? '';
+			$video_title   = $video_data['title'] ?? '';
+
+			// Try to set from URL.
+			$attachment_id = set_featured_image_from_url( $post_id, $thumbnail_url, $video_title );
 		}
 	}
 }

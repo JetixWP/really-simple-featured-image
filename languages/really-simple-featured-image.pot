@@ -2,14 +2,14 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Really Simple Featured Image 1.0.1\n"
+"Project-Id-Version: Really Simple Featured Image 1.0.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/really-simple-featured-image\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-12-23T15:50:08+00:00\n"
+"POT-Creation-Date: 2025-12-25T06:12:41+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: really-simple-featured-image\n"
@@ -172,36 +172,36 @@ msgstr ""
 msgid "Settings responsible for scanning images within post content to set as featured images."
 msgstr ""
 
-#: includes/Settings/Tabs/class-image.php:55
-#: includes/Settings/Tabs/class-video.php:55
+#: includes/Settings/Tabs/class-image.php:45
+#: includes/Settings/Tabs/class-video.php:45
 msgid "Scan Content Length (Characters)"
 msgstr ""
 
-#: includes/Settings/Tabs/class-image.php:56
+#: includes/Settings/Tabs/class-image.php:46
 msgid "Set the maximum number of characters to scan/read from post content when searching for images to set as the featured image. Increasing this value may impact performance on large posts."
 msgstr ""
 
-#: includes/Settings/Tabs/class-image.php:62
+#: includes/Settings/Tabs/class-image.php:52
 msgid "Image Position in Content"
 msgstr ""
 
-#: includes/Settings/Tabs/class-image.php:63
-msgid "Set which image position in the content to use as the featured image. For example, setting this to Second Image will use the 2nd image found in the content to generate thumbnail and set as the featured image."
+#: includes/Settings/Tabs/class-image.php:53
+msgid "Set which image position in the content to use as the featured image. For example, setting this to Second Image will set the 2nd image found in the content as the featured image."
 msgstr ""
 
-#: includes/Settings/Tabs/class-image.php:68
+#: includes/Settings/Tabs/class-image.php:58
 msgid "First Image"
 msgstr ""
 
-#: includes/Settings/Tabs/class-image.php:69
+#: includes/Settings/Tabs/class-image.php:59
 msgid "Second Image"
 msgstr ""
 
-#: includes/Settings/Tabs/class-image.php:70
+#: includes/Settings/Tabs/class-image.php:60
 msgid "Second Last Image"
 msgstr ""
 
-#: includes/Settings/Tabs/class-image.php:71
+#: includes/Settings/Tabs/class-image.php:61
 msgid "Last Image"
 msgstr ""
 
@@ -217,48 +217,36 @@ msgstr ""
 msgid "Settings responsible for scanning videos within post content to use to generate and set featured images."
 msgstr ""
 
-#: includes/Settings/Tabs/class-video.php:56
+#: includes/Settings/Tabs/class-video.php:46
 msgid "Set the maximum number of characters to scan/read from post content when searching for videos to set as the featured image. Increasing this value may impact performance on large posts."
 msgstr ""
 
-#: includes/Settings/Tabs/class-video.php:62
+#: includes/Settings/Tabs/class-video.php:52
 msgid "Video Position in Content"
 msgstr ""
 
-#: includes/Settings/Tabs/class-video.php:63
+#: includes/Settings/Tabs/class-video.php:53
 msgid "Set which video position in the content to use as the featured image. For example, setting this to Second Video will use the 2nd video found in the content to generate thumbnail and set as the featured image."
 msgstr ""
 
-#: includes/Settings/Tabs/class-video.php:68
+#: includes/Settings/Tabs/class-video.php:58
 msgid "First Video"
 msgstr ""
 
-#: includes/Settings/Tabs/class-video.php:69
+#: includes/Settings/Tabs/class-video.php:59
 msgid "Second Video"
 msgstr ""
 
-#: includes/Settings/Tabs/class-video.php:70
+#: includes/Settings/Tabs/class-video.php:60
 msgid "Second Last Video"
 msgstr ""
 
-#: includes/Settings/Tabs/class-video.php:71
+#: includes/Settings/Tabs/class-video.php:61
 msgid "Last Video"
 msgstr ""
 
 #: includes/Settings/Views/html-admin-settings.php:68
 msgid "Save changes"
-msgstr ""
-
-#: includes/Settings/Views/html-admin-settings.php:93
-msgid "Your Email"
-msgstr ""
-
-#: includes/Settings/Views/html-admin-settings.php:94
-msgid "First Name"
-msgstr ""
-
-#: includes/Settings/Views/html-admin-settings.php:95
-msgid "🚀 Send me the coupon"
 msgstr ""
 
 #: includes/Sources/class-register-sources.php:26
