@@ -60,7 +60,13 @@ class General extends Settings_Page {
 	public function get_settings( $current_section = '' ) {
 		$post_types = $this->get_available_post_types();
 
-		$default_enabled_post_types = get_post_types();
+		$default_enabled_post_types = apply_filters(
+			'rs_featured_image_default_enabled_post_types',
+			array(
+				'post' => true,
+				'page' => true,
+			)
+		);
 
 		$settings = array(
 			array(
