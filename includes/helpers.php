@@ -7,6 +7,8 @@
 
 namespace RS_Featured_Image;
 
+defined( 'ABSPATH' ) || exit;
+
 use function media_handle_sideload;
 
 /**

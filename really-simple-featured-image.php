@@ -3,7 +3,7 @@
  * Plugin Name: Really Simple Featured Image
  * Plugin URI:  https://github.com/JetixWP/really-simple-featured-image
  * Description: Automatically set the featured image from Image or Youtube, Vimeo, Dailymotion video in content.
- * Version:     1.0.2
+ * Version:     1.0.3
  * Author:      JetixWP Plugins
  * Author URI:  https://jetixwp.com
  * License:     GPL2
@@ -18,7 +18,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'RS_FEATURED_IMAGE_VERSION', '1.0.2' );
+define( 'RS_FEATURED_IMAGE_VERSION', '1.0.3' );
 define( 'RS_FEATURED_IMAGE_PLUGIN_FILE', __FILE__ );
 define( 'RS_FEATURED_IMAGE_PLUGIN_URL', plugin_dir_url( RS_FEATURED_IMAGE_PLUGIN_FILE ) );
 define( 'RS_FEATURED_IMAGE_PLUGIN_DIR', plugin_dir_path( RS_FEATURED_IMAGE_PLUGIN_FILE ) );

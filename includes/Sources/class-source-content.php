@@ -7,6 +7,8 @@
 
 namespace RS_Featured_Image\Sources;
 
+defined( 'ABSPATH' ) || exit;
+
 use WP_Post;
 use DOMDocument;
 use RS_Featured_Image\Options;

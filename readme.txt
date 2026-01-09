@@ -3,7 +3,7 @@ Contributors: jetixwp, lushkant
 Requires at least: 6.0
 Requires PHP: 8.0
 Tested up to: 6.9
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 Tags: featured image, automatic featured image, featured image from video, featured image from video thumbnail
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -58,7 +58,41 @@ If the image does not already exist in your media library, the plugin downloads 
 
 1. Settings page view.
 
+== External Services ==
+
+This plugin connects to third-party video platform APIs to retrieve video thumbnails when you choose "Video in Post Content" as your default source. These connections only occur when a post is saved or updated and contains an embedded video from one of the supported platforms.
+
+= YouTube =
+When a YouTube video is detected in your post content, the plugin sends the video ID to YouTube's oEmbed API to retrieve the video title and thumbnail URL.
+
+* Data sent: YouTube video ID.
+* When: On post save/update if the post has no featured image and contains a YouTube embed.
+* Service provider: Google LLC.
+* [Terms of Service](https://www.youtube.com/t/terms)
+* [Privacy Policy](https://policies.google.com/privacy)
+
+= Vimeo =
+When a Vimeo video is detected in your post content, the plugin sends the video ID to Vimeo's API to retrieve the video title and thumbnail URL.
+
+* Data sent: Vimeo video ID.
+* When: On post save/update if the post has no featured image and contains a Vimeo embed.
+* Service provider: Vimeo, Inc.
+* [Terms of Service](https://vimeo.com/terms)
+* [Privacy Policy](https://vimeo.com/privacy)
+
+= Dailymotion =
+When a Dailymotion video is detected in your post content, the plugin sends the video ID to Dailymotion's API to retrieve the video title and thumbnail URL.
+
+* Data sent: Dailymotion video ID.
+* When: On post save/update if the post has no featured image and contains a Dailymotion embed.
+* Service provider: Dailymotion SA.
+* [Terms of Service](https://www.dailymotion.com/legal)
+* [Privacy Policy](https://www.dailymotion.com/legal/privacy)
+
 == Changelog ==
+
+= 1.0.3 =
+* Fix wp.org reported issues
 
 = 1.0.2 =
 * Added Image and Video options

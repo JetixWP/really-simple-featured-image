@@ -7,6 +7,8 @@
 
 namespace RS_Featured_Image;
 
+defined( 'ABSPATH' ) || exit;
+
 use RS_Featured_Image\Settings\Register_Settings;
 use RS_Featured_Image\Sources\Register_Sources;
 use RS_Featured_Image\Featuresets\Register_Featuresets as Featuresets;

@@ -1,6 +1,6 @@
 {
   "name": "really-simple-featured-image",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -27,6 +27,7 @@
     "includes",
     "languages",
     "readme.txt",
+		"!readme.md",
     "really-simple-featured-image.php"
   ]
 }
