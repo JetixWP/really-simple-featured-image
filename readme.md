@@ -1,6 +1,6 @@
 [![License](https://img.shields.io/badge/license-GPL--2.0%2B-red.svg)](https://github.com/jetixwp/really-simple-featured-image/blob/master/license.txt)
 
-# Really Simple Featured Image - Setup Documentation
+# Really Simple Featured Image (Automatic Featured Images) - Setup Documentation
 
 ## 📋 Table of Contents
 
@@ -30,7 +30,7 @@ Really Simple Featured Image keeps your posts and pages visually consistent by f
 * Respects existing featured images and runs quietly in the background.
 
 = How It Works =
-1. Choose the default source (images in content or video thumbnails) from JetixWP -> Auto Featured Image.
+1. Choose the default source (images in content or video thumbnails) from JetixWP -> Featured Image.
 2. Select which post types should receive automatic featured images.
 3. Save or update a post - if it has no featured image, the plugin will attach the first match it finds.
 
@@ -42,7 +42,7 @@ Really Simple Featured Image keeps your posts and pages visually consistent by f
 
 1. Upload the plugin files to the /wp-content/plugins/really-simple-featured-image directory or install it via Plugins -> Add New.
 2. Activate Really Simple Featured Image through the Plugins screen.
-3. Navigate to JetixWP -> Auto Featured Image to pick your default source and supported post types.
+3. Navigate to JetixWP -> Featured Image to pick your default source and supported post types.
 4. Save a post without a featured image to see the automation in action.
 
 == Frequently Asked Questions ==
