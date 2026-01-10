@@ -1,4 +1,4 @@
-=== Really Simple Featured Image: Automatic Featured Image from Content (Video & Image) ===
+=== Really Simple Featured Image: Auto Featured Image from Content ===
 Contributors: jetixwp, lushkant
 Requires at least: 6.0
 Requires PHP: 8.0
