@@ -1,10 +1,10 @@
-=== Really Simple Featured Image: Auto Featured Image from Content ===
+=== Really Simple Featured Image: Automatic Featured Images ===
 Contributors: jetixwp, lushkant
 Requires at least: 6.0
 Requires PHP: 8.0
 Tested up to: 6.9
 Stable tag: 1.0.4
-Tags: featured image, automatic featured image, featured image from video, featured image from video thumbnail
+Tags: featured image, auto featured image, post thumbnails, featured image from video, thumbnails
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
