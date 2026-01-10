@@ -1,9 +1,9 @@
-=== Really Simple Featured Image ===
+=== Really Simple Featured Image: Automatic Featured Image from Content (Video & Image) ===
 Contributors: jetixwp, lushkant
 Requires at least: 6.0
 Requires PHP: 8.0
 Tested up to: 6.9
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 Tags: featured image, automatic featured image, featured image from video, featured image from video thumbnail
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -34,7 +34,7 @@ Really Simple Featured Image keeps your posts and pages visually consistent by f
 
 1. Upload the plugin files to the /wp-content/plugins/really-simple-featured-image directory or install it via Plugins -> Add New.
 2. Activate Really Simple Featured Image through the Plugins screen.
-3. Navigate to JetixWP -> Auto Featured Image to pick your default source and supported post types.
+3. Navigate to JetixWP -> Featured Image to pick your default source and supported post types.
 4. Save a post without a featured image to see the automation in action.
 
 == Frequently Asked Questions ==
@@ -56,7 +56,9 @@ If the image does not already exist in your media library, the plugin downloads 
 
 == Screenshots ==
 
-1. Settings page view.
+1. Featured Image from Video of Youtube, Vimeo and Dailymotion inside content.
+2. Featured Image from Post content images.
+3. Settings page view.
 
 == External Services ==
 
@@ -68,8 +70,7 @@ When a YouTube video is detected in your post content, the plugin sends the vide
 * Data sent: YouTube video ID.
 * When: On post save/update if the post has no featured image and contains a YouTube embed.
 * Service provider: Google LLC.
-* [Terms of Service](https://www.youtube.com/t/terms)
-* [Privacy Policy](https://policies.google.com/privacy)
+* [Terms of Service](https://www.youtube.com/t/terms) & [Privacy Policy](https://policies.google.com/privacy)
 
 = Vimeo =
 When a Vimeo video is detected in your post content, the plugin sends the video ID to Vimeo's API to retrieve the video title and thumbnail URL.
@@ -77,8 +78,7 @@ When a Vimeo video is detected in your post content, the plugin sends the video 
 * Data sent: Vimeo video ID.
 * When: On post save/update if the post has no featured image and contains a Vimeo embed.
 * Service provider: Vimeo, Inc.
-* [Terms of Service](https://vimeo.com/terms)
-* [Privacy Policy](https://vimeo.com/privacy)
+* [Terms of Service](https://vimeo.com/terms) & [Privacy Policy](https://vimeo.com/privacy)
 
 = Dailymotion =
 When a Dailymotion video is detected in your post content, the plugin sends the video ID to Dailymotion's API to retrieve the video title and thumbnail URL.
@@ -86,10 +86,13 @@ When a Dailymotion video is detected in your post content, the plugin sends the 
 * Data sent: Dailymotion video ID.
 * When: On post save/update if the post has no featured image and contains a Dailymotion embed.
 * Service provider: Dailymotion SA.
-* [Terms of Service](https://www.dailymotion.com/legal)
-* [Privacy Policy](https://www.dailymotion.com/legal/privacy)
+* [Terms of Service](https://www.dailymotion.com/legal) & [Privacy Policy](https://www.dailymotion.com/legal/privacy)
 
 == Changelog ==
+
+= 1.0.4 =
+* Release for wp.org
+* Other minor changes
 
 = 1.0.3 =
 * Fix wp.org reported issues
