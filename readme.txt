@@ -3,7 +3,7 @@ Contributors: jetixwp, lushkant
 Requires at least: 6.0
 Requires PHP: 8.0
 Tested up to: 6.9
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 Tags: featured image, automatic featured image, featured image from video, featured image from video thumbnail
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -89,6 +89,10 @@ When a Dailymotion video is detected in your post content, the plugin sends the 
 * [Terms of Service](https://www.dailymotion.com/legal) & [Privacy Policy](https://www.dailymotion.com/legal/privacy)
 
 == Changelog ==
+
+= 1.0.4 =
+* Release for wp.org
+* Other minor changes
 
 = 1.0.3 =
 * Fix wp.org reported issues
