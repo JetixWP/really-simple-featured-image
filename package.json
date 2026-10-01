@@ -27,7 +27,7 @@
     "includes",
     "languages",
     "readme.txt",
-		"!readme.md",
+    "uninstall.php",
     "really-simple-featured-image.php"
   ]
 }
