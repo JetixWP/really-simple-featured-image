@@ -425,6 +425,23 @@ function download_remote_image( string $url ) {
 		return false;
 	}
 
+	/**
+	 * Filters the largest image we accept, in megapixels.
+	 *
+	 * A small file can claim huge dimensions and exhaust memory when sizes are generated.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param int $max_megapixels Default 50.
+	 */
+	$max_pixels = (int) apply_filters( 'rs_featured_image_max_megapixels', 50 ) * 1000000;
+	$size       = wp_getimagesize( $tmp_file );
+
+	if ( ! $size || empty( $size[0] ) || empty( $size[1] ) || ( (int) $size[0] * (int) $size[1] ) > $max_pixels ) {
+		wp_delete_file( $tmp_file );
+		return false;
+	}
+
 	return array(
 		'file' => $tmp_file,
 		'name' => ( $basename ? $basename : 'featured-image' ) . '.' . $extensions[ $mime ],
