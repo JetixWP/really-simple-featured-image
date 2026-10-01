@@ -3,7 +3,7 @@ Contributors: jetixwp, lushkant
 Requires at least: 6.3
 Requires PHP: 8.0
 Tested up to: 7.1
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 Tags: featured image, auto featured image, featured image from video, video thumbnail, post thumbnails
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -103,6 +103,9 @@ When a Dailymotion video is found in your post content, the plugin sends the vid
 The Post types setting is now respected: only checked post types get automatic featured images (posts and pages by default). Check the setting if you relied on other post types. Remote images are only downloaded for people who can upload files. Deleting the plugin now removes its settings.
 
 == Changelog ==
+
+= 1.1.1 =
+* Fix: With PRO active, the settings sidebar no longer shows two thank-you cards.
 
 = 1.1.0 =
 * Fix: The Post types setting is now respected. Before, every post type was scanned, including attachments, menus and templates.

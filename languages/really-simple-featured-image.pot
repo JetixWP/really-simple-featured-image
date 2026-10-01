@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Really Simple Featured Image: Automatic Featured Images 1.1.0\n"
+"Project-Id-Version: Really Simple Featured Image: Automatic Featured Images 1.1.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/really-simple-featured-image\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-01T07:53:24+00:00\n"
+"POT-Creation-Date: 2026-10-01T11:24:55+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: really-simple-featured-image\n"
@@ -232,29 +232,29 @@ msgstr ""
 msgid "Save changes"
 msgstr ""
 
-#: includes/Settings/Views/html-admin-settings.php:75
+#: includes/Settings/Views/html-admin-settings.php:87
 msgid "Thank you for using our plugin!"
 msgstr ""
 
 #. translators: %s: email address link.
-#: includes/Settings/Views/html-admin-settings.php:80
+#: includes/Settings/Views/html-admin-settings.php:92
 msgid "We are looking for feedback to make it better for more sites. If you have an idea or a request, write to us at %s."
 msgstr ""
 
-#: includes/Settings/Views/html-admin-settings.php:88
+#: includes/Settings/Views/html-admin-settings.php:100
 msgid "If you like this plugin, you will love our other plugins too."
 msgstr ""
 
-#: includes/Settings/Views/html-admin-settings.php:91
+#: includes/Settings/Views/html-admin-settings.php:103
 msgid "View all plugins"
 msgstr ""
 
-#: includes/Settings/Views/html-admin-settings.php:94
+#: includes/Settings/Views/html-admin-settings.php:106
 msgid "Thank you for using Really Simple Featured Image. You are not just a user but one of the founders of our small but mighty product agency."
 msgstr ""
 
 #. translators: %s: founder name.
-#: includes/Settings/Views/html-admin-settings.php:99
+#: includes/Settings/Views/html-admin-settings.php:111
 msgid "%s, Founder and Lead Developer at JetixWP"
 msgstr ""
 
