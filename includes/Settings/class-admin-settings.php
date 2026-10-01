@@ -74,9 +74,6 @@ class Admin_Settings {
 
 		self::add_message( __( 'Your settings have been saved.', 'really-simple-featured-image' ) );
 
-		// Clear any unwanted data and flush rules.
-		update_option( 'rs_featured_image_queue_flush_rewrite_rules', 'yes' );
-
 		do_action( 'rs_featured_image_settings_saved' );
 	}
 

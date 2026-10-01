@@ -86,7 +86,7 @@ class General extends Settings_Page {
 				'id'      => 'default_source',
 				'type'    => 'select',
 				'class'   => 'rs-featured-image-select2',
-				'default' => 'content',
+				'default' => 'content-image',
 				'options' => Sources::get_source_options(),
 			),
 			array(
