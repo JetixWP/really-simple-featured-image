@@ -54,7 +54,7 @@ if ( ! function_exists( 'rs_featured_image_fs' ) ) {
 					'type'           => 'plugin',
 					'public_key'     => 'pk_cdc4b578d06509291b1e11d9339cf',
 					'is_premium'     => false,
-					'has_addons'     => false,
+					'has_addons'     => true,
 					'has_paid_plans' => false,
 					'menu'           => array(
 						'slug'       => 'rs-featured-image-settings',
