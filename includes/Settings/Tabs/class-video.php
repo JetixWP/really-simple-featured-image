@@ -49,6 +49,7 @@ class Video extends Settings_Page {
 				'default'           => 6000,
 				'custom_attributes' => array(
 					'min' => 100,
+					'max' => 100000,
 				),
 			),
 			array(

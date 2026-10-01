@@ -259,7 +259,12 @@ class Admin_Settings {
 
 			if ( ! empty( $value['custom_attributes'] ) && is_array( $value['custom_attributes'] ) ) {
 				foreach ( $value['custom_attributes'] as $attribute => $attribute_value ) {
-					$custom_attributes[] = esc_attr( $attribute ) . '="' . esc_attr( $attribute_value ) . '"';
+					// Attribute names can only hold safe characters; esc_attr() alone does not make a name safe.
+					$attribute = preg_replace( '/[^a-zA-Z0-9_:-]/', '', (string) $attribute );
+
+					if ( '' !== $attribute ) {
+						$custom_attributes[] = $attribute . '="' . esc_attr( $attribute_value ) . '"';
+					}
 				}
 			}
 
@@ -1006,11 +1011,31 @@ class Admin_Settings {
 					$value = wp_kses_post( trim( $raw_value ) );
 					break;
 				case 'number':
-					$value = is_null( $raw_value ) ? null : absint( $raw_value );
+					if ( is_null( $raw_value ) ) {
+						$value = null;
+					} elseif ( '' === trim( (string) $raw_value ) && isset( $option['default'] ) ) {
+						// An emptied field goes back to its default.
+						$value = absint( $option['default'] );
+					} else {
+						$value = absint( $raw_value );
+					}
+
+					if ( ! is_null( $value ) && isset( $option['custom_attributes']['min'] ) ) {
+						$value = max( $value, absint( $option['custom_attributes']['min'] ) );
+					}
+
+					if ( ! is_null( $value ) && isset( $option['custom_attributes']['max'] ) ) {
+						$value = min( $value, absint( $option['custom_attributes']['max'] ) );
+					}
 					break;
 				case 'multiselect':
 				case 'multi-checkbox':
 					$value = array_filter( array_map( __NAMESPACE__ . '\rs_featured_image_clean', (array) $raw_value ) );
+
+					// Keep only choices the field offers.
+					if ( 'multi-checkbox' === $option['type'] && ! empty( $option['options'] ) && is_array( $option['options'] ) ) {
+						$value = array_intersect_key( $value, $option['options'] );
+					}
 					break;
 				case 'select':
 					$allowed_values = empty( $option['options'] ) ? array() : array_map( 'strval', array_keys( $option['options'] ) );
