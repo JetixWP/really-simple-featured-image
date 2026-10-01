@@ -11,19 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/**
- * Note for reviewer: This is a false positive! The variable $tab_exists is not a global variable. This is a template file which gets included inside Admin_Settings::output class method.
- */
-// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
-$tab_exists                                   = isset( $tabs[ $rs_featured_image_settings_current_tab ] ) || has_action( 'rs_featured_image_sections_' . $rs_featured_image_settings_current_tab ) || has_action( 'rs_featured_image_settings_' . $rs_featured_image_settings_current_tab ) || has_action( 'rs_featured_image_settings_tabs_' . $rs_featured_image_settings_current_tab );
+// Unknown tabs are redirected in Register_Settings::load_settings_page() before any output.
 $rs_featured_image_settings_current_tab_label = isset( $tabs[ $rs_featured_image_settings_current_tab ] ) ? $tabs[ $rs_featured_image_settings_current_tab ] : '';
-
-global $current_user;
-
-if ( ! $tab_exists ) {
-	wp_safe_redirect( admin_url( 'admin.php?page=rs-featured-image-settings' ) );
-	exit;
-}
 ?>
 <div class="wrap rs-featured-image <?php echo esc_attr( $rs_featured_image_settings_current_tab ); ?>">
 	<div class="plugin-header">
@@ -52,7 +41,7 @@ if ( ! $tab_exists ) {
 					 */
 					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 					foreach ( $tabs as $slug => $label ) {
-						echo '<a href="' . esc_html( admin_url( 'admin.php?page=rs-featured-image-settings&tab=' . esc_attr( $slug ) ) ) . '" class="nav-tab ' . ( $rs_featured_image_settings_current_tab === $slug ? 'nav-tab-active' : '' ) . '">' . esc_html( $label ) . '</a>';
+						echo '<a href="' . esc_url( admin_url( 'admin.php?page=rs-featured-image-settings&tab=' . rawurlencode( $slug ) ) ) . '" class="nav-tab ' . ( $rs_featured_image_settings_current_tab === $slug ? 'nav-tab-active' : '' ) . '">' . esc_html( $label ) . '</a>';
 					}
 
 					do_action( 'rs_featured_image_settings_tabs' );

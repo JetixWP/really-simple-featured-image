@@ -2,7 +2,7 @@
 /**
  * Admin Settings Class
  *
- * @package  ReallySimpleFreeShipping
+ * @package  ReallySimpleFeaturedImage
  */
 
 namespace RS_Featured_Image\Settings;
@@ -114,7 +114,7 @@ class Admin_Settings {
 	/**
 	 * Settings page.
 	 *
-	 * Handles the display of the main ReallySimpleFreeShipping settings page in admin.
+	 * Handles the display of the main ReallySimpleFeaturedImage settings page in admin.
 	 */
 	public static function output() {
 		global $rs_featured_image_settings_current_section, $rs_featured_image_settings_current_tab;
@@ -210,7 +210,7 @@ class Admin_Settings {
 	/**
 	 * Output admin fields.
 	 *
-	 * Loops though the ReallySimpleFreeShipping options array and outputs each field.
+	 * Loops though the ReallySimpleFeaturedImage options array and outputs each field.
 	 *
 	 * @param array[] $options Opens array to output.
 	 */
@@ -376,7 +376,7 @@ class Admin_Settings {
 								value="<?php echo esc_attr( $option_value ); ?>"
 								class="<?php echo esc_attr( $value['class'] ); ?>"
 								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 								/><?php echo esc_html( $value['suffix'] ); ?> <?php echo wp_kses_post( $description ); ?>
 						</td>
 					</tr>
@@ -412,7 +412,7 @@ class Admin_Settings {
 								value="<?php echo esc_attr( $option_value ); ?>"
 								class="<?php echo esc_attr( $value['class'] ); ?>"
 								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 								/><?php echo esc_html( $value['suffix'] ); ?> <?php echo wp_kses_post( $description ); ?>
 								<a href="<?php echo esc_url( RS_FEATURED_IMAGE_PLUGIN_PRO_URL . '/?utm_source=plugin&utm_medium=referral&utm_campaign=settings' ); ?>" target="_blank"><?php echo esc_html__( 'Checkout Pro now', 'really-simple-featured-image' ); ?></a>
 						</td>
@@ -428,7 +428,7 @@ class Admin_Settings {
 								id="<?php echo esc_attr( $value['id'] ); ?>"
 								style="<?php echo esc_attr( $value['css'] ); ?>"
 								class="<?php echo esc_attr( $value['class'] ); ?>"
-								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 								><?php echo esc_html( $option_value ); ?></a><?php echo esc_html( $value['suffix'] ); ?> <?php echo esc_html( $description ); ?>
 						</td>
 					</tr>
@@ -450,7 +450,7 @@ class Admin_Settings {
 								style="<?php echo esc_attr( $value['css'] ); ?>"
 								class="<?php echo esc_attr( $value['class'] ); ?>"
 								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 								><?php echo esc_textarea( $option_value ); ?></textarea>
 
 								<p class="description"><?php echo wp_kses_post( $description ); ?></span>
@@ -478,7 +478,7 @@ class Admin_Settings {
 								id="<?php echo esc_attr( $value['id'] ); ?>"
 								style="<?php echo esc_attr( $value['css'] ); ?>"
 								class="<?php echo esc_attr( $value['class'] ); ?> <?php echo ( 'multiselect' === $value['type'] ) ? 'rs_featured_image-multi-select' : ''; ?>"
-								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 								<?php echo 'multiselect' === $value['type'] ? 'multiple="multiple"' : ''; ?>
 								>
 								<?php
@@ -522,7 +522,7 @@ class Admin_Settings {
 							id="<?php echo esc_attr( $value['id'] ); ?>"
 							style="<?php echo esc_attr( $value['css'] ); ?>"
 							class="<?php echo esc_attr( $value['class'] ); ?>"
-							<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+							<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 							<?php echo 'multiselect' === $value['type'] ? 'multiple="multiple"' : ''; ?>
 							>
 							<?php
@@ -574,7 +574,7 @@ class Admin_Settings {
 								value="<?php echo $has_image_set ? esc_attr( $option_value ) : ''; ?>"
 								class="<?php echo esc_attr( $value['class'] ); ?>"
 								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 								/><?php echo esc_html( $value['suffix'] ); ?>
 								<?php echo wp_kses_post( $description ); ?>
 						</td>
@@ -626,7 +626,7 @@ class Admin_Settings {
 								data-default-color="<?php echo esc_attr( $default_color ); ?>"
 								value="<?php echo $has_color_set ? esc_attr( $option_value ) : esc_attr( $default_color ); ?>"
 								class="color-field <?php echo esc_attr( $value['class'] ); ?>"
-								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 								/>
 						</td>
 					</tr>
@@ -657,7 +657,7 @@ class Admin_Settings {
 								data-default-color="<?php echo esc_attr( $default_color ); ?>"
 								value="<?php echo $has_color_set ? esc_attr( $option_value ) : ''; ?>"
 								class="color-field <?php echo esc_attr( $value['class'] ); ?>"
-								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 								/>
 						</td>
 					</tr>
@@ -686,7 +686,7 @@ class Admin_Settings {
 											type="radio"
 											style="<?php echo esc_attr( $value['css'] ); ?>"
 											class="<?php echo esc_attr( $value['class'] ); ?>"
-											<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+											<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 											<?php checked( $key, $option_value ); ?>
 											/> <?php echo esc_html( $val ); ?></label>
 									</li>
@@ -781,7 +781,7 @@ class Admin_Settings {
 								class="<?php echo esc_attr( isset( $value['class'] ) ? $value['class'] : '' ); ?>"
 								value="1"
 								<?php checked( $option_value, true ); ?>
-								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 							/> <?php echo esc_html( $description ); ?>
 							<?php if ( $value['switch'] ) { ?>
 								<span><?php esc_html_e( 'Toggle', 'really-simple-featured-image' ); ?></span>
@@ -814,7 +814,7 @@ class Admin_Settings {
 								id="<?php echo esc_attr( $value['id'] ); ?>"
 								style="<?php echo esc_attr( $value['css'] ); ?>"
 								class="<?php echo esc_attr( $value['class'] ); ?>"
-								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 								value="<?php echo esc_attr( $value['value'] ); ?>"
 								<?php if ( $value['disabled'] ) : ?>
 									disabled="disabled"
@@ -948,7 +948,7 @@ class Admin_Settings {
 	/**
 	 * Save admin fields.
 	 *
-	 * Loops though the ReallySimpleFreeShipping options array and outputs each field.
+	 * Loops though the ReallySimpleFeaturedImage options array and outputs each field.
 	 *
 	 * @param array $options Options array to output.
 	 * @return bool

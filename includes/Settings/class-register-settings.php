@@ -2,7 +2,7 @@
 /**
  * Settings handler.
  *
- * @package ReallySimpleFreeShipping
+ * @package ReallySimpleFeaturedImage
  */
 
 namespace RS_Featured_Image\Settings;
@@ -25,10 +25,6 @@ class Register_Settings {
 
 		// Handle saving settings earlier than load-{page} hook to avoid race conditions in conditional menus.
 		add_action( 'wp_loaded', array( $this, 'save_settings' ) );
-
-		add_action( 'init', array( $this, 'create_options' ) );
-
-		add_action( 'load-settings_page_rs-featured-image-settings', array( $this, 'cleanup_plugin_settings_page' ) );
 	}
 
 	/**
@@ -55,7 +51,7 @@ class Register_Settings {
 			add_action( 'admin_enqueue_scripts', array( $this, 'hide_freemius_submenus' ) );
 		}
 
-		add_submenu_page(
+		$hook_suffix = add_submenu_page(
 			$primary_slug,
 			__( 'Really Simple Featured Image Settings', 'really-simple-featured-image' ),
 			__( 'Featured Image', 'really-simple-featured-image' ),
@@ -63,6 +59,10 @@ class Register_Settings {
 			'rs-featured-image-settings',
 			array( $this, 'settings_page' )
 		);
+
+		if ( $hook_suffix ) {
+			add_action( 'load-' . $hook_suffix, array( $this, 'load_settings_page' ) );
+		}
 
 		// Remove duplicate menu hack.
 		// Note: It needs to go after the above add_submenu_page call.
@@ -93,38 +93,6 @@ class Register_Settings {
 	}
 
 	/**
-	 * Default options.
-	 *
-	 * Sets up the default options used on the settings page.
-	 */
-	public function create_options() {
-		if ( ! is_admin() ) {
-			return false;
-		}
-
-		// Include settings so that we can run through defaults.
-		include RS_FEATURED_IMAGE_PLUGIN_DIR . 'includes/Settings/class-admin-settings.php';
-
-		$settings = Admin_Settings::get_settings_pages();
-
-		foreach ( $settings as $section ) {
-			if ( 'object' !== gettype( $section ) || ! method_exists( $section, 'get_settings' ) ) {
-				continue;
-			}
-			$subsections = array_unique( array_merge( array( '' ), array_keys( $section->get_sections() ) ) );
-
-			foreach ( $subsections as $subsection ) {
-				foreach ( $section->get_settings( $subsection ) as $value ) {
-					if ( isset( $value['default'], $value['id'] ) ) {
-						$autoload = isset( $value['autoload'] ) ? (bool) $value['autoload'] : true;
-						add_option( $value['id'], $value['default'], '', ( $autoload ? 'yes' : 'no' ) );
-					}
-				}
-			}
-		}
-	}
-
-	/**
 	 * Handle saving of settings.
 	 *
 	 * @return void
@@ -143,6 +111,7 @@ class Register_Settings {
 		}
 
 		// Include settings pages.
+		require_once __DIR__ . '/class-admin-settings.php';
 		Admin_Settings::get_settings_pages();
 
 		// Get current tab/section.
@@ -161,11 +130,27 @@ class Register_Settings {
 	}
 
 	/**
-	 * Remove all notices from settings page for a clean and minimal look.
+	 * Runs before the settings page prints anything.
+	 *
+	 * Sends unknown tabs back to the first tab and removes other notices for a clean and minimal look.
 	 *
 	 * @return void
 	 */
-	public function cleanup_plugin_settings_page() {
+	public function load_settings_page() {
+		require_once __DIR__ . '/class-admin-settings.php';
+		Admin_Settings::get_settings_pages();
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only reads the tab to display.
+		$tab  = empty( $_GET['tab'] ) ? 'general' : sanitize_title( wp_unslash( $_GET['tab'] ) );
+		$tabs = apply_filters( 'rs_featured_image_settings_tabs_array', array() );
+
+		$tab_exists = isset( $tabs[ $tab ] ) || has_action( 'rs_featured_image_sections_' . $tab ) || has_action( 'rs_featured_image_settings_' . $tab ) || has_action( 'rs_featured_image_settings_tabs_' . $tab );
+
+		if ( ! $tab_exists ) {
+			wp_safe_redirect( admin_url( 'admin.php?page=rs-featured-image-settings' ) );
+			exit;
+		}
+
 		remove_all_actions( 'admin_notices' );
 	}
 }
@@ -183,63 +168,4 @@ function rs_featured_image_clean( $var ) {
 	}
 
 	return is_scalar( $var ) ? sanitize_text_field( $var ) : $var;
-}
-
-/**
- * Output admin fields.
- *
- * Loops though the ReallySimpleFreeShipping options array and outputs each field.
- *
- * @param array $options Opens array to output.
- */
-function rs_featured_image_admin_fields( $options ) {
-
-	if ( ! class_exists( 'Admin_Settings', false ) ) {
-		include __DIR__ . '/class-admin-settings.php';
-	}
-
-	Admin_Settings::output_fields( $options );
-}
-
-/**
- * Update all settings which are passed.
- *
- * @param array $options Option fields to save.
- * @param array $data Passed data.
- */
-function rs_featured_image_update_options( $options ) {
-
-	if ( ! class_exists( 'Admin_Settings', false ) ) {
-		include __DIR__ . '/class-admin-settings.php';
-	}
-
-	Admin_Settings::save_fields( $options );
-}
-
-/**
- * Get a setting from the settings API.
- *
- * @param mixed $option_name Option name to save.
- * @param mixed $default Default value to save.
- * @return string
- */
-function rs_featured_image_settings_get_option( $option_name, $default = '' ) {
-
-	if ( ! class_exists( 'Admin_Settings', false ) ) {
-		include __DIR__ . '/class-admin-settings.php';
-	}
-
-	return Admin_Settings::get_option( $option_name, $default );
-}
-
-/**
- * Sanitize the cost field.
- *
- * @clone WooCommerce.
- * @param string $value Unsanitized value.
- * @throws Exception Last error triggered.
- * @return string
- */
-function rs_featured_image_settings_sanitize_cost( $value ) {
-	return \Automattic\WooCommerce\Utilities\NumberUtil::sanitize_cost_in_current_locale( $value );
 }
