@@ -140,6 +140,28 @@
 					return false;
 				}
 			);
+
+			// Rollback: reinstall the selected earlier version.
+			$( '#rs_featured_image_rollback_version_button' ).on(
+				'click',
+				function ( e ) {
+					e.preventDefault();
+
+					const version = $( '#rs_featured_image_rollback_version_select_option' ).val();
+
+					if ( ! version || ! data.rollback_url ) {
+						return;
+					}
+
+					if ( data.i18n_rollback_confirm && ! window.confirm( data.i18n_rollback_confirm ) ) {
+						return;
+					}
+
+					const url = new URL( data.rollback_url, window.location.href );
+					url.searchParams.set( 'version', version );
+					window.location.href = url.toString();
+				}
+			);
 		}
 	);
 }( jQuery, rs_featured_image_settings_data ) );

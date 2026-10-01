@@ -3,7 +3,7 @@ Contributors: jetixwp, lushkant
 Requires at least: 6.3
 Requires PHP: 8.0
 Tested up to: 7.1
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 Tags: featured image, auto featured image, featured image from video, video thumbnail, post thumbnails
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -22,6 +22,7 @@ Really Simple Featured Image keeps your posts and pages visually consistent by f
 * Turn it on for the post types you want, including custom post types and WooCommerce products.
 * Reuses images already in your Media Library and never downloads the same image twice.
 * Never replaces a featured image you set, and if you remove one it stays removed.
+* Roll back to an earlier version from the settings screen if an update causes trouble.
 * Works for posts saved in the editor, through the REST API or by importers.
 
 = How It Works =
@@ -59,6 +60,9 @@ Yes. Set the source to either "Image in Post Content" or "Video in Post Content"
 
 = What happens with remote images? =
 If the image is not already in your Media Library, the plugin downloads it and adds it to the library before setting it as the featured image. Only real image files up to 15 MB and 50 megapixels are accepted, addresses on your local network are refused, and images are only downloaded when the person saving the post can upload files.
+
+= Can I go back to an earlier version? =
+Yes. Go to JetixWP -> Featured Image -> Rollback, pick a version and click Reinstall this version. Your settings are kept.
 
 = Does it work with page builders? =
 It reads the post content. Builders that save their markup in the post content work; builders that keep content elsewhere (for example Elementor) are not read yet.
@@ -103,6 +107,10 @@ When a Dailymotion video is found in your post content, the plugin sends the vid
 The Post types setting is now respected: only checked post types get automatic featured images (posts and pages by default). Check the setting if you relied on other post types. Remote images are only downloaded for people who can upload files. Deleting the plugin now removes its settings.
 
 == Changelog ==
+
+= 1.1.1 =
+* New: Rollback tab to reinstall an earlier version from WordPress.org if an update causes trouble. Settings are kept.
+* Fix: With PRO active, the settings sidebar no longer shows two thank-you cards.
 
 = 1.1.0 =
 * Fix: The Post types setting is now respected. Before, every post type was scanned, including attachments, menus and templates.

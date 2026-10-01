@@ -70,6 +70,18 @@ $rs_featured_image_settings_current_tab_label = isset( $tabs[ $rs_featured_image
 				</form>
 
 				<div class="sidebar">
+					<?php
+					/**
+					 * Filters whether the free plugin's thank-you card shows in the settings sidebar.
+					 *
+					 * Hidden once PRO has loaded, because PRO adds its own member card.
+					 *
+					 * @since 1.1.1
+					 *
+					 * @param bool $show Whether to show the card.
+					 */
+					if ( apply_filters( 'rs_featured_image_show_sidebar_help_box', ! did_action( 'rs_featured_image_pro_loaded' ) ) ) :
+						?>
 					<div class="help-box">
 						<div>
 							<h3><?php esc_html_e( 'Thank you for using our plugin!', 'really-simple-featured-image' ); ?></h3>
@@ -103,6 +115,7 @@ $rs_featured_image_settings_current_tab_label = isset( $tabs[ $rs_featured_image
 							</p>
 						</div>
 					</div>
+					<?php endif; ?>
 
 					<?php do_action( 'rs_featured_image_extend_settings_sidebar' ); ?>
 				</div>
