@@ -50,6 +50,7 @@ class Admin_Settings {
 			$settings[] = include 'Tabs/class-general.php';
 			$settings[] = include 'Tabs/class-image.php';
 			$settings[] = include 'Tabs/class-video.php';
+			$settings[] = include 'Tabs/class-rollback-settings.php';
 
 			$settings = apply_filters( 'rs_featured_image_get_settings_pages', $settings );
 

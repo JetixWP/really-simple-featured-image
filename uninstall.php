@@ -28,13 +28,15 @@ function rs_featured_image_uninstall_site() {
 	delete_metadata( 'post', 0, '_rs_featured_image_skip', '', true );
 	delete_metadata( 'post', 0, '_rs_featured_image_source_url', '', true );
 
-	// Cached video lookups.
+	// Cached video lookups and rollback version lists.
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Removes this plugin's transients on uninstall.
 	$wpdb->query(
 		$wpdb->prepare(
-			"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+			"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s",
 			$wpdb->esc_like( '_transient_rs_featured_image_video_' ) . '%',
-			$wpdb->esc_like( '_transient_timeout_rs_featured_image_video_' ) . '%'
+			$wpdb->esc_like( '_transient_timeout_rs_featured_image_video_' ) . '%',
+			$wpdb->esc_like( '_transient_rs_featured_image_rollback_versions_' ) . '%',
+			$wpdb->esc_like( '_transient_timeout_rs_featured_image_rollback_versions_' ) . '%'
 		)
 	);
 }
