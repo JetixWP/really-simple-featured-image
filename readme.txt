@@ -58,7 +58,7 @@ No. When you remove a featured image from a post, the plugin remembers it and do
 Yes. Set the source to either "Image in Post Content" or "Video in Post Content" in the settings. Video thumbnails support YouTube, Vimeo and Dailymotion.
 
 = What happens with remote images? =
-If the image is not already in your Media Library, the plugin downloads it and adds it to the library before setting it as the featured image. Only real image files up to 15 MB are accepted, and addresses on your local network are refused.
+If the image is not already in your Media Library, the plugin downloads it and adds it to the library before setting it as the featured image. Only real image files up to 15 MB and 50 megapixels are accepted, addresses on your local network are refused, and images are only downloaded when the person saving the post can upload files.
 
 = Does it work with page builders? =
 It reads the post content. Builders that save their markup in the post content work; builders that keep content elsewhere (for example Elementor) are not read yet.
@@ -97,6 +97,11 @@ When a Dailymotion video is found in your post content, the plugin sends the vid
 * Service provider: Dailymotion SA.
 * [Terms of Service](https://www.dailymotion.com/legal) & [Privacy Policy](https://www.dailymotion.com/legal/privacy)
 
+== Upgrade Notice ==
+
+= 1.1.0 =
+The Post types setting is now respected: only checked post types get automatic featured images (posts and pages by default). Check the setting if you relied on other post types. Remote images are only downloaded for people who can upload files. Deleting the plugin now removes its settings.
+
 == Changelog ==
 
 = 1.1.0 =
@@ -109,11 +114,14 @@ When a Dailymotion video is found in your post content, the plugin sends the vid
 * Fix: Default Source showed a value that was not one of the choices.
 * Improvement: YouTube live, Shorts and youtube-nocookie links are detected.
 * Improvement: Works for posts created through the REST API and importers, and sees the featured image picked in the block editor before looking for one.
-* Improvement: Remote images are downloaded safely: real images only, up to 15 MB, no local network addresses. The same remote image is never downloaded twice.
+* Security: Remote images are downloaded safely: real images only, up to 15 MB and 50 megapixels, no local network addresses, and only absolute image URLs. The same remote image is never downloaded twice.
+* Security: Remote images are only downloaded when the person saving the post (or its author, for imports) can upload files. Images already in the Media Library are still used for everyone.
+* Security: At most 3 found images or videos are tried per save, so a post full of broken links cannot slow the site down.
+* Security: Settings are checked on the server (allowed post types only, scan length 100 to 100000), and video titles are stored as plain text.
 * Improvement: Images downloaded from a video use the video title as title and alt text.
 * Improvement: Video lookups are cached.
 * Improvement: Settings no longer add extra options to the database on every admin page load.
-* Improvement: Plugin data is removed when the plugin is deleted (featured images are kept).
+* Improvement: Plugin data is removed when the plugin is deleted, on every site of a network (featured images are kept).
 * Improvement: License is now GPLv2 or later.
 * Requires WordPress 6.3 or newer. Tested up to 7.1.
 

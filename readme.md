@@ -30,6 +30,9 @@ npm run package     # build the plugin zip
 - `rs_featured_image_default_enabled_post_types` (filter): post types enabled before settings are saved.
 - `rs_featured_image_read_content_length_limit` (filter): characters of content to scan.
 - `rs_featured_image_max_download_size` (filter): largest remote image to download, in bytes.
+- `rs_featured_image_max_megapixels` (filter): largest image to accept, in megapixels.
+- `rs_featured_image_max_attempts` (filter): found images or videos tried per save (default 3).
+- `rs_featured_image_can_download` (filter): whether a remote image may be downloaded for a post.
 - `rs_featured_image_{before_,after_,}setting_featured_image_from_content` and `..._from_content_video` (actions).
 
 ## License
