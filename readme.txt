@@ -5,7 +5,7 @@ Requires PHP: 8.0
 Tested up to: 6.9
 Stable tag: 1.0.4
 Tags: featured image, auto featured image, post thumbnails, featured image from video, thumbnails
-License: GPLv2
+License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Automatically generate missing featured images from video or image inside content for Posts, Pages and CPTs.
