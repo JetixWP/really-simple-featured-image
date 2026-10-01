@@ -9,8 +9,6 @@
 ( function( $, data ) {
 	$(
 		function() {
-			const { addQueryArgs } = wp.url;
-
 			// Edit prompt.
 			$(
 				function() {
@@ -142,57 +140,6 @@
 					return false;
 				}
 			);
-
-			// Process Plugin Rollback.
-			function processPluginRollback( e ) {
-				if ( e.preventDefault ) {
-					e.preventDefault();
-				}
-
-				const version = $( '#rs_featured_image_rollback_version_select_option' ).val();
-				const rollbackUrl = addQueryArgs( data.rollback_url, { version: version } );
-
-				window.location.href = rollbackUrl;
-				return false;
-			}
-			$( '#rs_featured_image_rollback_version_button' ).on( 'click', processPluginRollback );
-
-			// Submit discount request.
-			function submitDiscountRequest( e ) {
-			e.preventDefault();
-
-			const email = $( this ).find( 'input[name="email"]' ).val();
-			const fname = $( this ).find( 'input[name="first_name"]' ).val();
-			const lname = $( this ).find( 'input[name="last_name"]' ).val();
-
-			const elSubmitBtn = $( this ).find( 'input[type=submit]' );
-			const messageEl = $( this ).find( '.rs-featured-image-pro-discount-response span' );
-			const defaultLabel = elSubmitBtn.data( 'default-label' );
-			messageEl.text( '' );
-			elSubmitBtn.val( 'Sending...' );
-
-			$.post(
-				'https://jetixwp.com/?jwp-api=rs_featured_image_pro_discount_code',
-				{
-					email: email,
-					first_name: JSON.stringify( fname ),
-					last_name: JSON.stringify( lname ),
-				}
-			).done( function( res ) {
-				messageEl.text( res?.message );
-				elSubmitBtn.val( defaultLabel );
-				elSubmitBtn.attr( 'disabled', 'disabled' );
-			} ).fail( function(res) {
-				messageEl.text( 'Failed to send, please try again or mail us support@jetixwp.com' );
-				elSubmitBtn.attr( 'disabled', 'disabled' );
-				setTimeout( function() {
-					elSubmitBtn.val( defaultLabel );
-					elSubmitBtn.removeAttr( 'disabled' );
-				}, 2000 );
-			} );
-		}
-
-		$( '#js-rs-featured-image-pro-request-discount' ).on( 'submit', submitDiscountRequest );
 		}
 	);
 }( jQuery, rs_featured_image_settings_data ) );

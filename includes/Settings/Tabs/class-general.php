@@ -85,7 +85,6 @@ class General extends Settings_Page {
 				'title'   => esc_html__( 'Default Source', 'really-simple-featured-image' ),
 				'id'      => 'default_source',
 				'type'    => 'select',
-				'class'   => 'rs-featured-image-select2',
 				'default' => 'content-image',
 				'options' => Sources::get_source_options(),
 			),

@@ -121,30 +121,27 @@ class Admin_Settings {
 
 		do_action( 'rs_featured_image_settings_start' );
 
-		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-
 		// Enqueue styles.
-		wp_enqueue_style( 'rs_featured_image_settings_select2', RS_FEATURED_IMAGE_PLUGIN_URL . 'assets/css/select2/select2' . $suffix . '.css', array(), get_asset_version( RS_FEATURED_IMAGE_PLUGIN_DIR . 'assets/css/select2/select2' . $suffix . '.css' ) );
+		wp_enqueue_style( 'rs_featured_image_settings', RS_FEATURED_IMAGE_PLUGIN_URL . 'assets/css/admin-settings.css', array(), get_asset_version( RS_FEATURED_IMAGE_PLUGIN_DIR . 'assets/css/admin-settings.css' ) );
 
-		wp_enqueue_style( 'rs_featured_image_settings', RS_FEATURED_IMAGE_PLUGIN_URL . 'assets/css/admin-settings.css', array( 'wp-color-picker' ), get_asset_version( RS_FEATURED_IMAGE_PLUGIN_DIR . 'assets/css/admin-settings.css' ) );
-
-		// Enqueue WP Media APIs.
+		// Enqueue WP Media APIs for image fields.
 		wp_enqueue_media();
 
 		// Enqueue scripts.
-		wp_enqueue_script( 'rs_featured_image_settings_select2', RS_FEATURED_IMAGE_PLUGIN_URL . 'assets/js/select2/select2' . $suffix . '.js', array( 'jquery' ), get_asset_version( RS_FEATURED_IMAGE_PLUGIN_DIR . 'assets/js/select2/select2' . $suffix . '.js' ), true );
-
-		wp_enqueue_script( 'rs_featured_image_settings', RS_FEATURED_IMAGE_PLUGIN_URL . 'assets/js/admin-settings.js', array( 'jquery', 'wp-util', 'jquery-ui-datepicker', 'jquery-ui-sortable', 'iris', 'wp-color-picker', 'rs_featured_image_settings_select2' ), get_asset_version( RS_FEATURED_IMAGE_PLUGIN_DIR . 'assets/js/admin-settings.js' ), true );
+		wp_enqueue_script( 'rs_featured_image_settings', RS_FEATURED_IMAGE_PLUGIN_URL . 'assets/js/admin-settings.js', array( 'jquery' ), get_asset_version( RS_FEATURED_IMAGE_PLUGIN_DIR . 'assets/js/admin-settings.js' ), true );
 
 		do_action( 'rs_featured_image_settings_after_scripts' );
 
 		wp_localize_script(
 			'rs_featured_image_settings',
 			'rs_featured_image_settings_data',
-			array(
-				'i18n_nav_warning'  => __( 'The changes you made will be lost if you navigate away from this page.', 'really-simple-featured-image' ),
-				'uploader_title'    => __( 'Select Thumbnail Image', 'really-simple-featured-image' ),
-				'uploader_btn_text' => __( 'Use this image', 'really-simple-featured-image' ),
+			apply_filters(
+				'rs_featured_image_settings_localized_data',
+				array(
+					'i18n_nav_warning'  => __( 'The changes you made will be lost if you navigate away from this page.', 'really-simple-featured-image' ),
+					'uploader_title'    => __( 'Select Thumbnail Image', 'really-simple-featured-image' ),
+					'uploader_btn_text' => __( 'Use this image', 'really-simple-featured-image' ),
+				)
 			)
 		);
 
