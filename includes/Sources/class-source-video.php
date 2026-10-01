@@ -17,6 +17,7 @@ use RS_Featured_Image\Sources\Video\Youtube_Video;
 use RS_Featured_Image\Sources\Video\Vimeo_Video;
 use RS_Featured_Image\Sources\Video\Dailymotion_Video;
 use function RS_Featured_Image\set_featured_image_from_url;
+use function RS_Featured_Image\get_items_by_position;
 use function RS_Featured_Image\should_process_post;
 
 /**
@@ -227,76 +228,19 @@ class Source_Video {
 
 		$video_content_position = $options->get( 'video_content_position', 'first' );
 
-		$thumbnail_url = '';
-
-		if ( 'first' === $video_content_position ) {
-			// Use the first found video URL.
-			foreach ( $video_urls as $video_url ) {
-				$video_id = $video_url['id'];
-
-				$video_data = self::get_video_data_by_host_and_id( $video_url['host'], $video_id );
-
-				// If no video data, continue to next.
-				$thumbnail_url = $video_data['thumbnail_url'] ?? '';
-
-				if ( empty( $thumbnail_url ) ) {
-					continue;
-				}
-
-				$video_title = $video_data['title'] ?? '';
-
-				// Try to set from URL.
-				$attachment_id = set_featured_image_from_url( $post_id, $thumbnail_url, $video_title );
-
-				if ( ! empty( $attachment_id ) ) {
-					break;
-				}
-			}
-		} elseif ( 'second' === $video_content_position ) {
-			$video_url = $video_urls[1] ?? '';
-
-			if ( empty( $video_url ) ) {
-				return;
-			}
-
-			$video_id = $video_url['id'];
-
-			$video_data    = self::get_video_data_by_host_and_id( $video_url['host'], $video_id );
+		foreach ( get_items_by_position( $video_urls, (string) $video_content_position ) as $video_url ) {
+			$video_data    = self::get_video_data_by_host_and_id( $video_url['host'], $video_url['id'] );
 			$thumbnail_url = $video_data['thumbnail_url'] ?? '';
-			$video_title   = $video_data['title'] ?? '';
 
-			// Try to set from URL.
-			$attachment_id = set_featured_image_from_url( $post_id, $thumbnail_url, $video_title );
-		} elseif ( 'last-second' === $video_content_position ) {
-			$video_url = $video_urls[ count( $video_urls ) - 2 ] ?? '';
-
-			if ( empty( $video_url ) ) {
-				return;
+			if ( empty( $thumbnail_url ) ) {
+				continue;
 			}
 
-			$video_id = $video_url['id'];
+			$attachment_id = set_featured_image_from_url( $post_id, $thumbnail_url, $video_data['title'] ?? '' );
 
-			$video_data    = self::get_video_data_by_host_and_id( $video_url['host'], $video_id );
-			$thumbnail_url = $video_data['thumbnail_url'] ?? '';
-			$video_title   = $video_data['title'] ?? '';
-
-			// Try to set from URL.
-			$attachment_id = set_featured_image_from_url( $post_id, $thumbnail_url, $video_title );
-		} elseif ( 'last' === $video_content_position ) {
-			$video_url = end( $video_urls );
-
-			if ( empty( $video_url ) ) {
-				return;
+			if ( $attachment_id ) {
+				break;
 			}
-
-			$video_id = $video_url['id'];
-
-			$video_data    = self::get_video_data_by_host_and_id( $video_url['host'], $video_id );
-			$thumbnail_url = $video_data['thumbnail_url'] ?? '';
-			$video_title   = $video_data['title'] ?? '';
-
-			// Try to set from URL.
-			$attachment_id = set_featured_image_from_url( $post_id, $thumbnail_url, $video_title );
 		}
 	}
 }

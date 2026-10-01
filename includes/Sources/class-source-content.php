@@ -17,6 +17,7 @@ use RS_Featured_Image\Utils\Has_Instance;
 use function RS_Featured_Image\set_featured_image_from_existing_image;
 use function RS_Featured_Image\set_featured_image_from_url;
 use function RS_Featured_Image\get_supported_image_extensions;
+use function RS_Featured_Image\get_items_by_position;
 use function RS_Featured_Image\should_process_post;
 
 /**
@@ -236,45 +237,17 @@ class Source_Content {
 
 		$image_content_position = $options->get( 'image_content_position', 'first' );
 
-		$attachment_id = '';
+		foreach ( get_items_by_position( $image_urls, (string) $image_content_position ) as $image_url ) {
+			// Reuse an existing attachment first, download only when there is none.
+			$attachment_id = set_featured_image_from_existing_image( $post_id, $image_url );
 
-		if ( 'first' === $image_content_position ) {
-			// Use the first found image URL.
-			foreach ( $image_urls as $image_url ) {
-				// Try to set featured image from existing attachment first.
-				$attachment_id = set_featured_image_from_existing_image( $post_id, $image_url );
-
-				// If no attachment found, try to set from URL.
-				if ( ! $attachment_id ) {
-					$attachment_id = set_featured_image_from_url( $post_id, $image_url );
-				}
-
-				// Break loop if we have successfully set a featured image.
-				if ( ! empty( $attachment_id ) ) {
-					break;
-				}
-			}
-		} elseif ( 'second' === $image_content_position ) {
-			$image_url = $image_urls[1] ?? '';
-
-			if ( empty( $image_url ) ) {
-				return;
+			if ( ! $attachment_id ) {
+				$attachment_id = set_featured_image_from_url( $post_id, $image_url );
 			}
 
-			// Use the second image URL.
-			$attachment_id = set_featured_image_from_url( $post_id, $image_url );
-		} elseif ( 'last-second' === $image_content_position ) {
-			$image_url = $image_urls[ count( $image_urls ) - 2 ];
-
-			if ( empty( $image_url ) ) {
-				return;
+			if ( $attachment_id ) {
+				break;
 			}
-
-			// Use the last second image URL.
-			$attachment_id = set_featured_image_from_url( $post_id, $image_url );
-		} elseif ( 'last' === $image_content_position ) {
-			// Use the last image URL.
-			$attachment_id = set_featured_image_from_url( $post_id, end( $image_urls ) );
 		}
 	}
 }

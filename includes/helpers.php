@@ -17,6 +17,11 @@ use function media_handle_sideload;
 const SKIP_META_KEY = '_rs_featured_image_skip';
 
 /**
+ * Attachment meta holding the remote URL an image was downloaded from.
+ */
+const SOURCE_URL_META_KEY = '_rs_featured_image_source_url';
+
+/**
  * Get asset version for cache busting.
  *
  * When JETIXWP_DEBUG is defined, uses the file modification time.
@@ -42,6 +47,34 @@ function get_asset_version( $file_path = '' ) {
  */
 function get_supported_image_extensions() {
 	return array( 'jpg', 'jpeg', 'png', 'webp', 'bmp' );
+}
+
+/**
+ * Pick the items to try for a position setting.
+ *
+ * "first" tries every item in order until one works; the other positions pick one item.
+ *
+ * @since 1.1.0
+ *
+ * @param array  $items    Items found in content, in order.
+ * @param string $position One of first, second, last-second, last.
+ *
+ * @return array Items to try, in order.
+ */
+function get_items_by_position( array $items, string $position ) {
+	$items = array_values( $items );
+	$count = count( $items );
+
+	switch ( $position ) {
+		case 'second':
+			return $count > 1 ? array( $items[1] ) : array();
+		case 'last-second':
+			return $count > 1 ? array( $items[ $count - 2 ] ) : array();
+		case 'last':
+			return $count > 0 ? array( $items[ $count - 1 ] ) : array();
+		default:
+			return $items;
+	}
 }
 
 /**
@@ -187,6 +220,28 @@ function set_featured_image_from_url( int $post_id, string $image_url, string $t
 		return false;
 	}
 
+	// Reuse an image we downloaded from the same URL before.
+	$existing = get_posts(
+		array(
+			'post_type'      => 'attachment',
+			'post_status'    => 'inherit',
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+			'no_found_rows'  => true,
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_query_meta_query -- Only runs when a post has no featured image.
+			'meta_query'     => array(
+				array(
+					'key'   => SOURCE_URL_META_KEY,
+					'value' => $url,
+				),
+			),
+		)
+	);
+
+	if ( ! empty( $existing ) && wp_attachment_is_image( $existing[0] ) ) {
+		return set_featured_image_from_attachment( $post_id, (int) $existing[0] );
+	}
+
 	if ( ! function_exists( 'media_handle_sideload' ) ) {
 		require_once ABSPATH . 'wp-admin/includes/media.php';
 		require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -217,6 +272,8 @@ function set_featured_image_from_url( int $post_id, string $image_url, string $t
 		wp_delete_file( $download['file'] );
 		return false;
 	}
+
+	update_post_meta( $attachment_id, SOURCE_URL_META_KEY, $url );
 
 	if ( '' !== trim( $title ) ) {
 		update_post_meta( $attachment_id, '_wp_attachment_image_alt', sanitize_text_field( $title ) );
