@@ -185,9 +185,9 @@ class Source_Video {
 	 */
 	public function get_video_provider_patterns() {
 		return array(
-			'youtube'     => '#(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{6,})#i',
-			'vimeo'       => '#(?:https?:\/\/)?(?:www\.)?(?:vimeo\.com\/|player\.vimeo\.com\/video\/)(\d+)#i',
-			'dailymotion' => '#(?:https?:\/\/)?(?:www\.)?(?:dailymotion\.com\/video\/|dai\.ly\/)([a-zA-Z0-9]+)#i',
+			'youtube'     => '#(?:https?:)?(?://)?(?:www\.|m\.)?(?:youtube(?:-nocookie)?\.com/(?:watch\?(?:[^"\'\s<>]*?&(?:amp;)?)?v=|embed/|shorts/|live/|v/)|youtu\.be/)([a-zA-Z0-9_-]{11})#i',
+			'vimeo'       => '#(?:https?:)?(?://)?(?:www\.)?(?:vimeo\.com/(?:video/|channels/[\w-]+/|groups/[\w-]+/videos/)?|player\.vimeo\.com/video/)(\d+)#i',
+			'dailymotion' => '#(?:https?:)?(?://)?(?:www\.|geo\.)?(?:dailymotion\.com/(?:embed/)?video/|dai\.ly/|dailymotion\.com/player(?:/[\w-]+)?\.html\?video=)([a-zA-Z0-9]+)#i',
 		);
 	}
 
@@ -200,16 +200,31 @@ class Source_Video {
 	 * @return array Video data array.
 	 */
 	public static function get_video_data_by_host_and_id( string $host, string $video_id ) {
+		$cache_key = 'rs_featured_image_video_' . md5( $host . ':' . $video_id );
+		$cached    = get_transient( $cache_key );
+
+		if ( is_array( $cached ) ) {
+			return $cached;
+		}
+
 		switch ( $host ) {
 			case 'youtube':
-				return Youtube_Video::get_data_by_id( $video_id );
+				$video_data = Youtube_Video::get_data_by_id( $video_id );
+				break;
 			case 'vimeo':
-				return Vimeo_Video::get_data_by_id( $video_id );
+				$video_data = Vimeo_Video::get_data_by_id( $video_id );
+				break;
 			case 'dailymotion':
-				return Dailymotion_Video::get_data_by_id( $video_id );
+				$video_data = Dailymotion_Video::get_data_by_id( $video_id );
+				break;
 			default:
-				return array();
+				$video_data = array();
 		}
+
+		// Remember lookups so saving a post again does not call the provider again; retry failures sooner.
+		set_transient( $cache_key, $video_data, empty( $video_data['thumbnail_url'] ) ? HOUR_IN_SECONDS : 12 * HOUR_IN_SECONDS );
+
+		return $video_data;
 	}
 
 	/**

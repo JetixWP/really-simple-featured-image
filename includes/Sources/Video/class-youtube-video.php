@@ -7,6 +7,8 @@
 
 namespace RS_Featured_Image\Sources\Video;
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Class Youtube_Video
  */
@@ -21,33 +23,36 @@ class Youtube_Video {
 	 */
 	public static function get_data_by_id( string $video_id ) {
 		$video_data = array();
-		$request    = wp_remote_get( 'https://www.youtube.com/oembed?format=json&url=https://www.youtube.com/watch?v=' . $video_id );
 
-		if ( is_array( $request ) && ! is_wp_error( $request ) && 200 === wp_remote_retrieve_response_code( $request ) ) {
-			$request_data = json_decode( wp_remote_retrieve_body( $request ) );
+		if ( ! preg_match( '/^[a-zA-Z0-9_-]{11}$/', $video_id ) ) {
+			return $video_data;
+		}
 
-			$youtube_thumb_url_string = 'https://img.youtube.com/vi/%s/%s.jpg';
-			$remote_headers           = wp_remote_head(
-				sprintf(
-					$youtube_thumb_url_string,
-					$video_id,
-					'maxresdefault'
-				)
-			);
+		$thumb_url = 'https://img.youtube.com/vi/%s/%s.jpg';
 
-			$video_data['thumbnail_url'] = ( 404 === wp_remote_retrieve_response_code( $remote_headers ) ) ?
-			sprintf(
-				$youtube_thumb_url_string,
-				$video_id,
-				'hqdefault'
-			) :
-			sprintf(
-				$youtube_thumb_url_string,
-				$video_id,
-				'maxresdefault'
-			);
+		// Highest resolution first; YouTube answers 404 when a video has no maxres thumbnail.
+		$maxres = wp_safe_remote_head( sprintf( $thumb_url, $video_id, 'maxresdefault' ), array( 'timeout' => 10 ) );
 
-			$video_data['title'] = $request_data->title;
+		$video_data['thumbnail_url'] = 200 === wp_remote_retrieve_response_code( $maxres )
+			? sprintf( $thumb_url, $video_id, 'maxresdefault' )
+			: sprintf( $thumb_url, $video_id, 'hqdefault' );
+
+		// The title is optional; oEmbed fails for videos that do not allow embedding.
+		$request = wp_safe_remote_get(
+			add_query_arg(
+				array(
+					'format' => 'json',
+					'url'    => rawurlencode( 'https://www.youtube.com/watch?v=' . $video_id ),
+				),
+				'https://www.youtube.com/oembed'
+			),
+			array( 'timeout' => 10 )
+		);
+
+		if ( 200 === wp_remote_retrieve_response_code( $request ) ) {
+			$response = json_decode( wp_remote_retrieve_body( $request ) );
+
+			$video_data['title'] = isset( $response->title ) ? (string) $response->title : '';
 		}
 
 		return $video_data;
