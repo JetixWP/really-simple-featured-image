@@ -12,6 +12,11 @@ defined( 'ABSPATH' ) || exit;
 use function media_handle_sideload;
 
 /**
+ * Post meta flag set when a person removes a featured image, so it is not added back automatically.
+ */
+const SKIP_META_KEY = '_rs_featured_image_skip';
+
+/**
  * Get asset version for cache busting.
  *
  * When JETIXWP_DEBUG is defined, uses the file modification time.
@@ -84,7 +89,7 @@ function should_process_post( $post ) {
 		$should_process = false;
 	} elseif ( ! in_array( $post->post_type, get_enabled_post_types(), true ) || ! post_type_supports( $post->post_type, 'thumbnail' ) ) {
 		$should_process = false;
-	} elseif ( has_post_thumbnail( $post ) ) {
+	} elseif ( has_post_thumbnail( $post ) || get_post_meta( $post->ID, SKIP_META_KEY, true ) ) {
 		$should_process = false;
 	}
 

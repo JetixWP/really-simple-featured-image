@@ -30,7 +30,6 @@ class Source_Content {
 	 */
 	public function __construct() {
 		add_action( 'wp_after_insert_post', array( $this, 'check_content_for_images' ), 10, 2 );
-		add_action( 'deleted_post_meta', array( $this, 'handle_deleted_thumbnail' ), 20, 3 );
 		add_action( 'rs_featured_image_setting_featured_image_from_content', array( __CLASS__, 'set_featured_image_from_content' ), 10, 2 );
 	}
 
@@ -219,22 +218,6 @@ class Source_Content {
 		}
 
 		return array_values( array_unique( $normalized ) );
-	}
-
-	/**
-	 * Handle deleted thumbnail post meta.
-	 *
-	 * @param int    $meta_id    Meta ID.
-	 * @param int    $post_id    Post ID.
-	 * @param string $meta_key   Meta key.
-	 */
-	public function handle_deleted_thumbnail( $meta_id, $post_id, $meta_key ) {
-		if ( '_thumbnail_id' !== $meta_key ) {
-			return;
-		}
-
-		// Thumbnail was explicitly removed by user.
-		$this->check_content_for_images( $post_id, get_post( $post_id ) );
 	}
 
 	/**
