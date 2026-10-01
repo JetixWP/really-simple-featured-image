@@ -11,19 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/**
- * Note for reviewer: This is a false positive! The variable $tab_exists is not a global variable. This is a template file which gets included inside Admin_Settings::output class method.
- */
-// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
-$tab_exists                                   = isset( $tabs[ $rs_featured_image_settings_current_tab ] ) || has_action( 'rs_featured_image_sections_' . $rs_featured_image_settings_current_tab ) || has_action( 'rs_featured_image_settings_' . $rs_featured_image_settings_current_tab ) || has_action( 'rs_featured_image_settings_tabs_' . $rs_featured_image_settings_current_tab );
+// Unknown tabs are redirected in Register_Settings::load_settings_page() before any output.
 $rs_featured_image_settings_current_tab_label = isset( $tabs[ $rs_featured_image_settings_current_tab ] ) ? $tabs[ $rs_featured_image_settings_current_tab ] : '';
-
-global $current_user;
-
-if ( ! $tab_exists ) {
-	wp_safe_redirect( admin_url( 'admin.php?page=rs-featured-image-settings' ) );
-	exit;
-}
 ?>
 <div class="wrap rs-featured-image <?php echo esc_attr( $rs_featured_image_settings_current_tab ); ?>">
 	<div class="plugin-header">
@@ -52,7 +41,7 @@ if ( ! $tab_exists ) {
 					 */
 					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 					foreach ( $tabs as $slug => $label ) {
-						echo '<a href="' . esc_html( admin_url( 'admin.php?page=rs-featured-image-settings&tab=' . esc_attr( $slug ) ) ) . '" class="nav-tab ' . ( $rs_featured_image_settings_current_tab === $slug ? 'nav-tab-active' : '' ) . '">' . esc_html( $label ) . '</a>';
+						echo '<a href="' . esc_url( admin_url( 'admin.php?page=rs-featured-image-settings&tab=' . rawurlencode( $slug ) ) ) . '" class="nav-tab ' . ( $rs_featured_image_settings_current_tab === $slug ? 'nav-tab-active' : '' ) . '">' . esc_html( $label ) . '</a>';
 					}
 
 					do_action( 'rs_featured_image_settings_tabs' );
@@ -83,19 +72,35 @@ if ( ! $tab_exists ) {
 				<div class="sidebar">
 					<div class="help-box">
 						<div>
-							<h3>👋 Thank you for using our plugin!</h3>
-							<p class="desc">We are currently looking for user feedback to improve it further for most use cases. If you have something to suggest, please feel free to drop your request at - <a href="mailto:hello@jetixwp.com" target="_blank">hello@jetixwp.com</a>.</p>
+							<h3><?php esc_html_e( 'Thank you for using our plugin!', 'really-simple-featured-image' ); ?></h3>
+							<p class="desc">
+								<?php
+								printf(
+									/* translators: %s: email address link. */
+									esc_html__( 'We are looking for feedback to make it better for more sites. If you have an idea or a request, write to us at %s.', 'really-simple-featured-image' ),
+									'<a href="mailto:hello@jetixwp.com">hello@jetixwp.com</a>'
+								);
+								?>
+							</p>
 						</div>
 
 						<div>
-							<p class="desc">If you like this plugin, you will absolutely love our other plugins.</p>
+							<p class="desc"><?php esc_html_e( 'If you like this plugin, you will love our other plugins too.', 'really-simple-featured-image' ); ?></p>
 						</div>
 						<div>
-							<a class="button button-primary" href="https://jetixwp.com/plugins?utm_campaign=settings-sidebar&utm_source=rs_free_shipping-plugin" target="_blank">✨ View all Plugins</a>
+							<a class="button button-primary" href="https://jetixwp.com/plugins?utm_campaign=settings-sidebar&utm_source=rs_featured_image-plugin" target="_blank"><?php esc_html_e( 'View all plugins', 'really-simple-featured-image' ); ?></a>
 						</div>
 						<div>
-							<p><em>Thank you for using our Free Shipping addon for WooCommerce again, you are not just any supporter but truly the founders of our small but mighty product agency.</em></p>
-							<p><strong>Krishna</strong>, Founder and Lead Developer at JetixWP</p>
+							<p><em><?php esc_html_e( 'Thank you for using Really Simple Featured Image. You are not just a user but one of the founders of our small but mighty product agency.', 'really-simple-featured-image' ); ?></em></p>
+							<p>
+								<?php
+								printf(
+									/* translators: %s: founder name. */
+									esc_html__( '%s, Founder and Lead Developer at JetixWP', 'really-simple-featured-image' ),
+									'<strong>Krishna</strong>'
+								);
+								?>
+							</p>
 						</div>
 					</div>
 

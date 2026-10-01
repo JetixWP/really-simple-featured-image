@@ -42,11 +42,15 @@ class Video extends Settings_Page {
 				'desc'  => esc_html__( 'Settings responsible for scanning videos within post content to use to generate and set featured images.', 'really-simple-featured-image' ),
 			),
 			array(
-				'title'   => esc_html__( 'Scan Content Length (Characters)', 'really-simple-featured-image' ),
-				'desc'    => __( 'Set the maximum number of characters to scan/read from post content when searching for videos to set as the featured image. Increasing this value may impact performance on large posts.', 'really-simple-featured-image' ),
-				'id'      => 'video_content_length',
-				'type'    => 'number',
-				'default' => 6000,
+				'title'             => esc_html__( 'Scan Content Length (Characters)', 'really-simple-featured-image' ),
+				'desc'              => __( 'Set the maximum number of characters to scan/read from post content when searching for videos to set as the featured image. Increasing this value may impact performance on large posts.', 'really-simple-featured-image' ),
+				'id'                => 'video_content_length',
+				'type'              => 'number',
+				'default'           => 6000,
+				'custom_attributes' => array(
+					'min' => 100,
+					'max' => 100000,
+				),
 			),
 			array(
 				'title'   => esc_html__( 'Video Position in Content', 'really-simple-featured-image' ),

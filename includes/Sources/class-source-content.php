@@ -17,6 +17,10 @@ use RS_Featured_Image\Utils\Has_Instance;
 use function RS_Featured_Image\set_featured_image_from_existing_image;
 use function RS_Featured_Image\set_featured_image_from_url;
 use function RS_Featured_Image\get_supported_image_extensions;
+use function RS_Featured_Image\get_items_by_position;
+use function RS_Featured_Image\get_max_attempts;
+use function RS_Featured_Image\should_process_post;
+use function RS_Featured_Image\get_scan_length;
 
 /**
  * Class Source_Content
@@ -28,8 +32,7 @@ class Source_Content {
 	 * Constructor.
 	 */
 	public function __construct() {
-		add_action( 'save_post', array( $this, 'check_content_for_images' ), 10, 2 );
-		add_action( 'deleted_post_meta', array( $this, 'handle_deleted_thumbnail' ), 20, 3 );
+		add_action( 'wp_after_insert_post', array( $this, 'check_content_for_images' ), 10, 2 );
 		add_action( 'rs_featured_image_setting_featured_image_from_content', array( __CLASS__, 'set_featured_image_from_content' ), 10, 2 );
 	}
 
@@ -40,11 +43,6 @@ class Source_Content {
 	 * @param WP_Post     $post Post object.
 	 */
 	public function check_content_for_images( int|WP_Post $post_id, WP_Post $post ) {
-		// Check if this is an autosave.
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-			return;
-		}
-
 		// Check if the option to use content images is enabled.
 		$options = Options::get_instance();
 
@@ -56,21 +54,18 @@ class Source_Content {
 			return;
 		}
 
-		// If this is a revision, switch to parent.
-		if ( wp_is_post_revision( $post_id ) && is_object( $post ) ) {
-			$post_id = $post->post_parent;
-		}
-
 		// Prevent trying to assign when trashing or untrashing posts in the list screen.
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_REQUEST['action'] ) && in_array( $_REQUEST['action'], array( 'trash', 'untrash', 'add-menu-item' ), true ) ) {
 			return;
 		}
 
-		// Ensure post is an object or if post already has a featured image.
-		if ( has_post_thumbnail( $post_id ) || ! $post ) {
+		// Only enabled post types, real posts and posts without a featured image.
+		if ( ! should_process_post( $post ) ) {
 			return;
 		}
+
+		$post_id = $post->ID;
 
 		$content = $post->post_content ?? '';
 
@@ -79,9 +74,9 @@ class Source_Content {
 			return;
 		}
 
-		$content_length = apply_filters( 'rs_featured_image_read_content_length_limit', 6000, $source_set, $post_id );
+		$content_length = absint( apply_filters( 'rs_featured_image_read_content_length_limit', get_scan_length( 'image' ), $source_set, $post_id ) );
 
-		// Limit content length to 6000 characters to improve performance.
+		// Limit how much content is read to keep saves fast.
 		$content = substr( $content, 0, $content_length );
 
 		// Extract image URLs from content.
@@ -117,7 +112,7 @@ class Source_Content {
 
 		// 1. DOM parsing (img, source, picture, data-src)
 		if ( class_exists( 'DOMDocument' ) ) {
-			libxml_use_internal_errors( true );
+			$libxml_errors = libxml_use_internal_errors( true );
 
 			$dom = new DOMDocument();
 			$dom->loadHTML( '<?xml encoding="utf-8" ?>' . $content );
@@ -149,6 +144,7 @@ class Source_Content {
 			}
 
 			libxml_clear_errors();
+			libxml_use_internal_errors( $libxml_errors );
 		}
 
 		$supported_image_extensions         = get_supported_image_extensions();
@@ -214,11 +210,16 @@ class Source_Content {
 				$raw_url = untrailingslashit( $site_url ) . $raw_url;
 			}
 
-			// Skip non-image garbage.
-			if (
-			'regex' === $url['type'] &&
-			! preg_match( '/\.(?:' . $supported_image_extensions_pattern . ')(\?|$)/i', $raw_url )
-			) {
+			// Only absolute web URLs; skips data:, bare relative paths and other schemes.
+			if ( ! preg_match( '#^https?://#i', $raw_url ) ) {
+				continue;
+			}
+
+			$has_image_extension = (bool) preg_match( '/\.(?:' . $supported_image_extensions_pattern . ')(\?|$)/i', $raw_url );
+			$is_same_host        = strtolower( (string) wp_parse_url( $raw_url, PHP_URL_HOST ) ) === strtolower( (string) wp_parse_url( $site_url, PHP_URL_HOST ) );
+
+			// Skip non-image garbage, and never request other paths on this site (core skips the IP check for the site's own host).
+			if ( ! $has_image_extension && ( 'regex' === $url['type'] || $is_same_host ) ) {
 				continue;
 			}
 
@@ -226,22 +227,6 @@ class Source_Content {
 		}
 
 		return array_values( array_unique( $normalized ) );
-	}
-
-	/**
-	 * Handle deleted thumbnail post meta.
-	 *
-	 * @param int    $meta_id    Meta ID.
-	 * @param int    $post_id    Post ID.
-	 * @param string $meta_key   Meta key.
-	 */
-	public function handle_deleted_thumbnail( $meta_id, $post_id, $meta_key ) {
-		if ( '_thumbnail_id' !== $meta_key ) {
-			return;
-		}
-
-		// Thumbnail was explicitly removed by user.
-		$this->check_content_for_images( $post_id, get_post( $post_id ) );
 	}
 
 	/**
@@ -260,45 +245,17 @@ class Source_Content {
 
 		$image_content_position = $options->get( 'image_content_position', 'first' );
 
-		$attachment_id = '';
+		foreach ( array_slice( get_items_by_position( $image_urls, (string) $image_content_position ), 0, get_max_attempts() ) as $image_url ) {
+			// Reuse an existing attachment first, download only when there is none.
+			$attachment_id = set_featured_image_from_existing_image( $post_id, $image_url );
 
-		if ( 'first' === $image_content_position ) {
-			// Use the first found image URL.
-			foreach ( $image_urls as $image_url ) {
-				// Try to set featured image from existing attachment first.
-				$attachment_id = set_featured_image_from_existing_image( $post_id, $image_url );
-
-				// If no attachment found, try to set from URL.
-				if ( ! $attachment_id ) {
-					$attachment_id = set_featured_image_from_url( $post_id, $image_url );
-				}
-
-				// Break loop if we have successfully set a featured image.
-				if ( ! empty( $attachment_id ) ) {
-					break;
-				}
-			}
-		} elseif ( 'second' === $image_content_position ) {
-			$image_url = $image_urls[1] ?? '';
-
-			if ( empty( $image_url ) ) {
-				return;
+			if ( ! $attachment_id ) {
+				$attachment_id = set_featured_image_from_url( $post_id, $image_url );
 			}
 
-			// Use the second image URL.
-			$attachment_id = set_featured_image_from_url( $post_id, $image_url );
-		} elseif ( 'last-second' === $image_content_position ) {
-			$image_url = $image_urls[ count( $image_urls ) - 2 ];
-
-			if ( empty( $image_url ) ) {
-				return;
+			if ( $attachment_id ) {
+				break;
 			}
-
-			// Use the last second image URL.
-			$attachment_id = set_featured_image_from_url( $post_id, $image_url );
-		} elseif ( 'last' === $image_content_position ) {
-			// Use the last image URL.
-			$attachment_id = set_featured_image_from_url( $post_id, end( $image_urls ) );
 		}
 	}
 }

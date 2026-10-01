@@ -53,6 +53,13 @@ final class Plugin {
 	public $sources_manager;
 
 	/**
+	 * Self Updater.
+	 *
+	 * @var Updater
+	 */
+	public $self_updater;
+
+	/**
 	 * Plugin constructor.
 	 */
 	public function __construct() {
@@ -99,6 +106,10 @@ final class Plugin {
 		// Register Sources.
 		$this->sources_manager = Register_Sources::get_instance();
 
+		// Run migrations after an update.
+		$this->self_updater = new Updater();
+		add_action( 'admin_init', array( $this->self_updater, 'init' ) );
+
 		// Register action links.
 		add_filter( 'network_admin_plugin_action_links_' . RS_FEATURED_IMAGE_PLUGIN_BASE, array( $this, 'filter_plugin_action_links' ) );
 		add_filter( 'plugin_action_links_' . RS_FEATURED_IMAGE_PLUGIN_BASE, array( $this, 'filter_plugin_action_links' ) );
@@ -116,6 +127,7 @@ final class Plugin {
 		// Settings.
 		require_once RS_FEATURED_IMAGE_PLUGIN_DIR . 'includes/helpers.php';
 		require_once RS_FEATURED_IMAGE_PLUGIN_DIR . 'includes/class-options.php';
+		require_once RS_FEATURED_IMAGE_PLUGIN_DIR . 'includes/class-updater.php';
 		require_once RS_FEATURED_IMAGE_PLUGIN_DIR . 'includes/Settings/class-register-settings.php';
 
 		// Frontend loaders.

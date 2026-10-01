@@ -1,28 +1,27 @@
 # Copyright (C) 2026 JetixWP Plugins
-# This file is distributed under the GPL2.
+# This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Really Simple Featured Image 1.0.3\n"
+"Project-Id-Version: Really Simple Featured Image: Automatic Featured Images 1.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/really-simple-featured-image\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-01-10T02:14:39+00:00\n"
+"POT-Creation-Date: 2026-10-01T07:53:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: really-simple-featured-image\n"
 
 #. Plugin Name of the plugin
 #: really-simple-featured-image.php
-#: includes/Settings/Views/html-admin-settings.php:32
-msgid "Really Simple Featured Image"
+msgid "Really Simple Featured Image: Automatic Featured Images"
 msgstr ""
 
 #. Plugin URI of the plugin
 #: really-simple-featured-image.php
-msgid "https://github.com/JetixWP/really-simple-featured-image"
+msgid "https://jetixwp.com/plugins/really-simple-featured-image/"
 msgstr ""
 
 #. Description of the plugin
@@ -40,7 +39,7 @@ msgstr ""
 msgid "https://jetixwp.com"
 msgstr ""
 
-#: includes/class-plugin.php:140
+#: includes/class-plugin.php:152
 msgid "Settings"
 msgstr ""
 
@@ -48,62 +47,62 @@ msgstr ""
 msgid "Your settings have been saved."
 msgstr ""
 
-#: includes/Settings/class-admin-settings.php:148
+#: includes/Settings/class-admin-settings.php:141
 msgid "The changes you made will be lost if you navigate away from this page."
 msgstr ""
 
-#: includes/Settings/class-admin-settings.php:149
+#: includes/Settings/class-admin-settings.php:142
 msgid "Select Thumbnail Image"
 msgstr ""
 
-#: includes/Settings/class-admin-settings.php:150
+#: includes/Settings/class-admin-settings.php:143
 msgid "Use this image"
 msgstr ""
 
-#: includes/Settings/class-admin-settings.php:278
-#: includes/Settings/class-admin-settings.php:345
+#: includes/Settings/class-admin-settings.php:277
+#: includes/Settings/class-admin-settings.php:344
 msgid "Pro"
 msgstr ""
 
-#: includes/Settings/class-admin-settings.php:279
-#: includes/Settings/class-admin-settings.php:420
-#: includes/Settings/class-admin-settings.php:539
+#: includes/Settings/class-admin-settings.php:278
+#: includes/Settings/class-admin-settings.php:419
+#: includes/Settings/class-admin-settings.php:538
 msgid "Checkout Pro now"
 msgstr ""
 
-#: includes/Settings/class-admin-settings.php:570
-#: includes/Settings/class-admin-settings.php:598
+#: includes/Settings/class-admin-settings.php:569
+#: includes/Settings/class-admin-settings.php:597
 msgid "Change Image"
 msgstr ""
 
-#: includes/Settings/class-admin-settings.php:571
+#: includes/Settings/class-admin-settings.php:570
 msgid "Revert to Default"
 msgstr ""
 
-#: includes/Settings/class-admin-settings.php:725
-#: includes/Settings/class-admin-settings.php:790
+#: includes/Settings/class-admin-settings.php:724
+#: includes/Settings/class-admin-settings.php:789
 msgid "Toggle"
 msgstr ""
 
-#: includes/Settings/class-admin-settings.php:828
+#: includes/Settings/class-admin-settings.php:827
 msgid "Copy"
 msgstr ""
 
-#: includes/Settings/class-register-settings.php:46
+#: includes/Settings/class-register-settings.php:42
 msgctxt "Page title"
 msgid "JetixWP Plugins"
 msgstr ""
 
-#: includes/Settings/class-register-settings.php:47
+#: includes/Settings/class-register-settings.php:43
 msgctxt "Menu title"
 msgid "JetixWP"
 msgstr ""
 
-#: includes/Settings/class-register-settings.php:60
+#: includes/Settings/class-register-settings.php:56
 msgid "Really Simple Featured Image Settings"
 msgstr ""
 
-#: includes/Settings/class-register-settings.php:61
+#: includes/Settings/class-register-settings.php:57
 msgid "Featured Image"
 msgstr ""
 
@@ -131,12 +130,12 @@ msgstr ""
 msgid "Default Source"
 msgstr ""
 
-#: includes/Settings/Tabs/class-general.php:96
+#: includes/Settings/Tabs/class-general.php:95
 msgctxt "settings title"
 msgid "Enable Post Types Support"
 msgstr ""
 
-#: includes/Settings/Tabs/class-general.php:97
+#: includes/Settings/Tabs/class-general.php:96
 msgid "Please select the post types you wish to enable automatic featured image support at."
 msgstr ""
 
@@ -161,27 +160,27 @@ msgstr ""
 msgid "Set the maximum number of characters to scan/read from post content when searching for images to set as the featured image. Increasing this value may impact performance on large posts."
 msgstr ""
 
-#: includes/Settings/Tabs/class-image.php:52
+#: includes/Settings/Tabs/class-image.php:56
 msgid "Image Position in Content"
 msgstr ""
 
-#: includes/Settings/Tabs/class-image.php:53
+#: includes/Settings/Tabs/class-image.php:57
 msgid "Set which image position in the content to use as the featured image. For example, setting this to Second Image will set the 2nd image found in the content as the featured image."
 msgstr ""
 
-#: includes/Settings/Tabs/class-image.php:58
+#: includes/Settings/Tabs/class-image.php:62
 msgid "First Image"
 msgstr ""
 
-#: includes/Settings/Tabs/class-image.php:59
+#: includes/Settings/Tabs/class-image.php:63
 msgid "Second Image"
 msgstr ""
 
-#: includes/Settings/Tabs/class-image.php:60
+#: includes/Settings/Tabs/class-image.php:64
 msgid "Second Last Image"
 msgstr ""
 
-#: includes/Settings/Tabs/class-image.php:61
+#: includes/Settings/Tabs/class-image.php:65
 msgid "Last Image"
 msgstr ""
 
@@ -201,38 +200,68 @@ msgstr ""
 msgid "Set the maximum number of characters to scan/read from post content when searching for videos to set as the featured image. Increasing this value may impact performance on large posts."
 msgstr ""
 
-#: includes/Settings/Tabs/class-video.php:52
+#: includes/Settings/Tabs/class-video.php:56
 msgid "Video Position in Content"
 msgstr ""
 
-#: includes/Settings/Tabs/class-video.php:53
+#: includes/Settings/Tabs/class-video.php:57
 msgid "Set which video position in the content to use as the featured image. For example, setting this to Second Video will use the 2nd video found in the content to generate thumbnail and set as the featured image."
 msgstr ""
 
-#: includes/Settings/Tabs/class-video.php:58
+#: includes/Settings/Tabs/class-video.php:62
 msgid "First Video"
 msgstr ""
 
-#: includes/Settings/Tabs/class-video.php:59
+#: includes/Settings/Tabs/class-video.php:63
 msgid "Second Video"
 msgstr ""
 
-#: includes/Settings/Tabs/class-video.php:60
+#: includes/Settings/Tabs/class-video.php:64
 msgid "Second Last Video"
 msgstr ""
 
-#: includes/Settings/Tabs/class-video.php:61
+#: includes/Settings/Tabs/class-video.php:65
 msgid "Last Video"
 msgstr ""
 
-#: includes/Settings/Views/html-admin-settings.php:76
+#: includes/Settings/Views/html-admin-settings.php:21
+msgid "Really Simple Featured Image"
+msgstr ""
+
+#: includes/Settings/Views/html-admin-settings.php:65
 msgid "Save changes"
 msgstr ""
 
-#: includes/Sources/class-register-sources.php:26
+#: includes/Settings/Views/html-admin-settings.php:75
+msgid "Thank you for using our plugin!"
+msgstr ""
+
+#. translators: %s: email address link.
+#: includes/Settings/Views/html-admin-settings.php:80
+msgid "We are looking for feedback to make it better for more sites. If you have an idea or a request, write to us at %s."
+msgstr ""
+
+#: includes/Settings/Views/html-admin-settings.php:88
+msgid "If you like this plugin, you will love our other plugins too."
+msgstr ""
+
+#: includes/Settings/Views/html-admin-settings.php:91
+msgid "View all plugins"
+msgstr ""
+
+#: includes/Settings/Views/html-admin-settings.php:94
+msgid "Thank you for using Really Simple Featured Image. You are not just a user but one of the founders of our small but mighty product agency."
+msgstr ""
+
+#. translators: %s: founder name.
+#: includes/Settings/Views/html-admin-settings.php:99
+msgid "%s, Founder and Lead Developer at JetixWP"
+msgstr ""
+
+#: includes/Sources/class-register-sources.php:37
 msgid "Image in Post Content"
 msgstr ""
 
-#: includes/Sources/class-register-sources.php:27
+#: includes/Sources/class-register-sources.php:38
 msgid "Video in Post Content"
 msgstr ""

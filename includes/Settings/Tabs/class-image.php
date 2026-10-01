@@ -42,11 +42,15 @@ class Image extends Settings_Page {
 				'desc'  => esc_html__( 'Settings responsible for scanning images within post content to set as featured images.', 'really-simple-featured-image' ),
 			),
 			array(
-				'title'   => esc_html__( 'Scan Content Length (Characters)', 'really-simple-featured-image' ),
-				'desc'    => __( 'Set the maximum number of characters to scan/read from post content when searching for images to set as the featured image. Increasing this value may impact performance on large posts.', 'really-simple-featured-image' ),
-				'id'      => 'image_content_length',
-				'type'    => 'number',
-				'default' => 6000,
+				'title'             => esc_html__( 'Scan Content Length (Characters)', 'really-simple-featured-image' ),
+				'desc'              => __( 'Set the maximum number of characters to scan/read from post content when searching for images to set as the featured image. Increasing this value may impact performance on large posts.', 'really-simple-featured-image' ),
+				'id'                => 'image_content_length',
+				'type'              => 'number',
+				'default'           => 6000,
+				'custom_attributes' => array(
+					'min' => 100,
+					'max' => 100000,
+				),
 			),
 			array(
 				'title'   => esc_html__( 'Image Position in Content', 'really-simple-featured-image' ),

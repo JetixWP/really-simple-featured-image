@@ -17,6 +17,10 @@ use RS_Featured_Image\Sources\Video\Youtube_Video;
 use RS_Featured_Image\Sources\Video\Vimeo_Video;
 use RS_Featured_Image\Sources\Video\Dailymotion_Video;
 use function RS_Featured_Image\set_featured_image_from_url;
+use function RS_Featured_Image\get_items_by_position;
+use function RS_Featured_Image\get_max_attempts;
+use function RS_Featured_Image\should_process_post;
+use function RS_Featured_Image\get_scan_length;
 
 /**
  * Class Source_Video
@@ -32,7 +36,7 @@ class Source_Video {
 		$this->include_video_providers();
 
 		// Hook into save_post to check for videos.
-		add_action( 'save_post', array( $this, 'check_content_for_videos' ), 10, 2 );
+		add_action( 'wp_after_insert_post', array( $this, 'check_content_for_videos' ), 10, 2 );
 
 		// Hook into the featured image setting action.
 		add_action( 'rs_featured_image_setting_featured_image_from_content_video', array( __CLASS__, 'set_featured_image_from_videos' ), 10, 2 );
@@ -54,11 +58,6 @@ class Source_Video {
 	 * @param WP_Post     $post Post object.
 	 */
 	public function check_content_for_videos( int|WP_Post $post_id, WP_Post $post ) {
-		// Check if this is an autosave.
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-			return;
-		}
-
 		// Check if the option to use content videos is enabled.
 		$options = Options::get_instance();
 
@@ -69,21 +68,18 @@ class Source_Video {
 			return;
 		}
 
-		// If this is a revision, switch to parent.
-		if ( wp_is_post_revision( $post_id ) && is_object( $post ) ) {
-			$post_id = $post->post_parent;
-		}
-
 		// Prevent trying to assign when trashing or untrashing posts in the list screen.
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_REQUEST['action'] ) && in_array( $_REQUEST['action'], array( 'trash', 'untrash', 'add-menu-item' ), true ) ) {
 			return;
 		}
 
-		// Ensure post is an object or if post already has a featured image.
-		if ( has_post_thumbnail( $post_id ) || ! $post ) {
+		// Only enabled post types, real posts and posts without a featured image.
+		if ( ! should_process_post( $post ) ) {
 			return;
 		}
+
+		$post_id = $post->ID;
 
 		$content = $post->post_content ?? '';
 
@@ -92,9 +88,9 @@ class Source_Video {
 			return;
 		}
 
-		$content_length = apply_filters( 'rs_featured_image_read_content_length_limit', 6000, $source_set, $post_id );
+		$content_length = absint( apply_filters( 'rs_featured_image_read_content_length_limit', get_scan_length( 'video' ), $source_set, $post_id ) );
 
-		// Limit content length to 6000 characters to improve performance.
+		// Limit how much content is read to keep saves fast.
 		$content = substr( $content, 0, $content_length );
 
 		// Extract Video URLs from content.
@@ -131,7 +127,7 @@ class Source_Video {
 
 		// 1. DOM-based extraction (iframe, anchor)
 		if ( class_exists( 'DOMDocument' ) ) {
-			libxml_use_internal_errors( true );
+			$libxml_errors = libxml_use_internal_errors( true );
 
 			$dom = new DOMDocument();
 			$dom->loadHTML( '<?xml encoding="utf-8" ?>' . $content );
@@ -159,6 +155,7 @@ class Source_Video {
 			}
 
 			libxml_clear_errors();
+			libxml_use_internal_errors( $libxml_errors );
 		}
 
 		// 2. Raw URL scanning (plain text / builders)
@@ -191,9 +188,9 @@ class Source_Video {
 	 */
 	public function get_video_provider_patterns() {
 		return array(
-			'youtube'     => '#(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{6,})#i',
-			'vimeo'       => '#(?:https?:\/\/)?(?:www\.)?(?:vimeo\.com\/|player\.vimeo\.com\/video\/)(\d+)#i',
-			'dailymotion' => '#(?:https?:\/\/)?(?:www\.)?(?:dailymotion\.com\/video\/|dai\.ly\/)([a-zA-Z0-9]+)#i',
+			'youtube'     => '#(?:https?:)?(?://)?(?:www\.|m\.)?(?:youtube(?:-nocookie)?\.com/(?:watch\?(?:[^"\'\s<>]*?&(?:amp;)?)?v=|embed/|shorts/|live/|v/)|youtu\.be/)([a-zA-Z0-9_-]{11})#i',
+			'vimeo'       => '#(?:https?:)?(?://)?(?:www\.)?(?:vimeo\.com/(?:video/|channels/[\w-]+/|groups/[\w-]+/videos/)?|player\.vimeo\.com/video/)(\d+)#i',
+			'dailymotion' => '#(?:https?:)?(?://)?(?:www\.|geo\.)?(?:dailymotion\.com/(?:embed/)?video/|dai\.ly/|dailymotion\.com/player(?:/[\w-]+)?\.html\?video=)([a-zA-Z0-9]+)#i',
 		);
 	}
 
@@ -206,16 +203,31 @@ class Source_Video {
 	 * @return array Video data array.
 	 */
 	public static function get_video_data_by_host_and_id( string $host, string $video_id ) {
+		$cache_key = 'rs_featured_image_video_' . md5( $host . ':' . $video_id );
+		$cached    = get_transient( $cache_key );
+
+		if ( is_array( $cached ) ) {
+			return $cached;
+		}
+
 		switch ( $host ) {
 			case 'youtube':
-				return Youtube_Video::get_data_by_id( $video_id );
+				$video_data = Youtube_Video::get_data_by_id( $video_id );
+				break;
 			case 'vimeo':
-				return Vimeo_Video::get_data_by_id( $video_id );
+				$video_data = Vimeo_Video::get_data_by_id( $video_id );
+				break;
 			case 'dailymotion':
-				return Dailymotion_Video::get_data_by_id( $video_id );
+				$video_data = Dailymotion_Video::get_data_by_id( $video_id );
+				break;
 			default:
-				return array();
+				$video_data = array();
 		}
+
+		// Remember lookups so saving a post again does not call the provider again; retry failures sooner.
+		set_transient( $cache_key, $video_data, empty( $video_data['thumbnail_url'] ) ? HOUR_IN_SECONDS : 12 * HOUR_IN_SECONDS );
+
+		return $video_data;
 	}
 
 	/**
@@ -234,76 +246,19 @@ class Source_Video {
 
 		$video_content_position = $options->get( 'video_content_position', 'first' );
 
-		$thumbnail_url = '';
-
-		if ( 'first' === $video_content_position ) {
-			// Use the first found video URL.
-			foreach ( $video_urls as $video_url ) {
-				$video_id = $video_url['id'];
-
-				$video_data = self::get_video_data_by_host_and_id( $video_url['host'], $video_id );
-
-				// If no video data, continue to next.
-				$thumbnail_url = $video_data['thumbnail_url'] ?? '';
-
-				if ( empty( $thumbnail_url ) ) {
-					continue;
-				}
-
-				$video_title = $video_data['title'] ?? '';
-
-				// Try to set from URL.
-				$attachment_id = set_featured_image_from_url( $post_id, $thumbnail_url, $video_title );
-
-				if ( ! empty( $attachment_id ) ) {
-					break;
-				}
-			}
-		} elseif ( 'second' === $video_content_position ) {
-			$video_url = $video_urls[1] ?? '';
-
-			if ( empty( $video_url ) ) {
-				return;
-			}
-
-			$video_id = $video_url['id'];
-
-			$video_data    = self::get_video_data_by_host_and_id( $video_url['host'], $video_id );
+		foreach ( array_slice( get_items_by_position( $video_urls, (string) $video_content_position ), 0, get_max_attempts() ) as $video_url ) {
+			$video_data    = self::get_video_data_by_host_and_id( $video_url['host'], $video_url['id'] );
 			$thumbnail_url = $video_data['thumbnail_url'] ?? '';
-			$video_title   = $video_data['title'] ?? '';
 
-			// Try to set from URL.
-			$attachment_id = set_featured_image_from_url( $post_id, $thumbnail_url, $video_title );
-		} elseif ( 'last-second' === $video_content_position ) {
-			$video_url = $video_urls[ count( $video_urls ) - 2 ] ?? '';
-
-			if ( empty( $video_url ) ) {
-				return;
+			if ( empty( $thumbnail_url ) ) {
+				continue;
 			}
 
-			$video_id = $video_url['id'];
+			$attachment_id = set_featured_image_from_url( $post_id, $thumbnail_url, $video_data['title'] ?? '' );
 
-			$video_data    = self::get_video_data_by_host_and_id( $video_url['host'], $video_id );
-			$thumbnail_url = $video_data['thumbnail_url'] ?? '';
-			$video_title   = $video_data['title'] ?? '';
-
-			// Try to set from URL.
-			$attachment_id = set_featured_image_from_url( $post_id, $thumbnail_url, $video_title );
-		} elseif ( 'last' === $video_content_position ) {
-			$video_url = end( $video_urls );
-
-			if ( empty( $video_url ) ) {
-				return;
+			if ( $attachment_id ) {
+				break;
 			}
-
-			$video_id = $video_url['id'];
-
-			$video_data    = self::get_video_data_by_host_and_id( $video_url['host'], $video_id );
-			$thumbnail_url = $video_data['thumbnail_url'] ?? '';
-			$video_title   = $video_data['title'] ?? '';
-
-			// Try to set from URL.
-			$attachment_id = set_featured_image_from_url( $post_id, $thumbnail_url, $video_title );
 		}
 	}
 }

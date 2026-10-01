@@ -2,7 +2,7 @@
 /**
  * Admin Settings Class
  *
- * @package  ReallySimpleFreeShipping
+ * @package  ReallySimpleFeaturedImage
  */
 
 namespace RS_Featured_Image\Settings;
@@ -74,9 +74,6 @@ class Admin_Settings {
 
 		self::add_message( __( 'Your settings have been saved.', 'really-simple-featured-image' ) );
 
-		// Clear any unwanted data and flush rules.
-		update_option( 'rs_featured_image_queue_flush_rewrite_rules', 'yes' );
-
 		do_action( 'rs_featured_image_settings_saved' );
 	}
 
@@ -117,37 +114,34 @@ class Admin_Settings {
 	/**
 	 * Settings page.
 	 *
-	 * Handles the display of the main ReallySimpleFreeShipping settings page in admin.
+	 * Handles the display of the main ReallySimpleFeaturedImage settings page in admin.
 	 */
 	public static function output() {
 		global $rs_featured_image_settings_current_section, $rs_featured_image_settings_current_tab;
 
 		do_action( 'rs_featured_image_settings_start' );
 
-		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-
 		// Enqueue styles.
-		wp_enqueue_style( 'rs_featured_image_settings_select2', RS_FEATURED_IMAGE_PLUGIN_URL . 'assets/css/select2/select2' . $suffix . '.css', array(), get_asset_version( RS_FEATURED_IMAGE_PLUGIN_DIR . 'assets/css/select2/select2' . $suffix . '.css' ) );
+		wp_enqueue_style( 'rs_featured_image_settings', RS_FEATURED_IMAGE_PLUGIN_URL . 'assets/css/admin-settings.css', array(), get_asset_version( RS_FEATURED_IMAGE_PLUGIN_DIR . 'assets/css/admin-settings.css' ) );
 
-		wp_enqueue_style( 'rs_featured_image_settings', RS_FEATURED_IMAGE_PLUGIN_URL . 'assets/css/admin-settings.css', array( 'wp-color-picker' ), get_asset_version( RS_FEATURED_IMAGE_PLUGIN_DIR . 'assets/css/admin-settings.css' ) );
-
-		// Enqueue WP Media APIs.
+		// Enqueue WP Media APIs for image fields.
 		wp_enqueue_media();
 
 		// Enqueue scripts.
-		wp_enqueue_script( 'rs_featured_image_settings_select2', RS_FEATURED_IMAGE_PLUGIN_URL . 'assets/js/select2/select2' . $suffix . '.js', array( 'jquery' ), get_asset_version( RS_FEATURED_IMAGE_PLUGIN_DIR . 'assets/js/select2/select2' . $suffix . '.js' ), true );
-
-		wp_enqueue_script( 'rs_featured_image_settings', RS_FEATURED_IMAGE_PLUGIN_URL . 'assets/js/admin-settings.js', array( 'jquery', 'wp-util', 'jquery-ui-datepicker', 'jquery-ui-sortable', 'iris', 'wp-color-picker', 'rs_featured_image_settings_select2' ), get_asset_version( RS_FEATURED_IMAGE_PLUGIN_DIR . 'assets/js/admin-settings.js' ), true );
+		wp_enqueue_script( 'rs_featured_image_settings', RS_FEATURED_IMAGE_PLUGIN_URL . 'assets/js/admin-settings.js', array( 'jquery' ), get_asset_version( RS_FEATURED_IMAGE_PLUGIN_DIR . 'assets/js/admin-settings.js' ), true );
 
 		do_action( 'rs_featured_image_settings_after_scripts' );
 
 		wp_localize_script(
 			'rs_featured_image_settings',
 			'rs_featured_image_settings_data',
-			array(
-				'i18n_nav_warning'  => __( 'The changes you made will be lost if you navigate away from this page.', 'really-simple-featured-image' ),
-				'uploader_title'    => __( 'Select Thumbnail Image', 'really-simple-featured-image' ),
-				'uploader_btn_text' => __( 'Use this image', 'really-simple-featured-image' ),
+			apply_filters(
+				'rs_featured_image_settings_localized_data',
+				array(
+					'i18n_nav_warning'  => __( 'The changes you made will be lost if you navigate away from this page.', 'really-simple-featured-image' ),
+					'uploader_title'    => __( 'Select Thumbnail Image', 'really-simple-featured-image' ),
+					'uploader_btn_text' => __( 'Use this image', 'really-simple-featured-image' ),
+				)
 			)
 		);
 
@@ -213,7 +207,7 @@ class Admin_Settings {
 	/**
 	 * Output admin fields.
 	 *
-	 * Loops though the ReallySimpleFreeShipping options array and outputs each field.
+	 * Loops though the ReallySimpleFeaturedImage options array and outputs each field.
 	 *
 	 * @param array[] $options Opens array to output.
 	 */
@@ -265,7 +259,12 @@ class Admin_Settings {
 
 			if ( ! empty( $value['custom_attributes'] ) && is_array( $value['custom_attributes'] ) ) {
 				foreach ( $value['custom_attributes'] as $attribute => $attribute_value ) {
-					$custom_attributes[] = esc_attr( $attribute ) . '="' . esc_attr( $attribute_value ) . '"';
+					// Attribute names can only hold safe characters; esc_attr() alone does not make a name safe.
+					$attribute = preg_replace( '/[^a-zA-Z0-9_:-]/', '', (string) $attribute );
+
+					if ( '' !== $attribute ) {
+						$custom_attributes[] = $attribute . '="' . esc_attr( $attribute_value ) . '"';
+					}
 				}
 			}
 
@@ -379,7 +378,7 @@ class Admin_Settings {
 								value="<?php echo esc_attr( $option_value ); ?>"
 								class="<?php echo esc_attr( $value['class'] ); ?>"
 								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 								/><?php echo esc_html( $value['suffix'] ); ?> <?php echo wp_kses_post( $description ); ?>
 						</td>
 					</tr>
@@ -415,7 +414,7 @@ class Admin_Settings {
 								value="<?php echo esc_attr( $option_value ); ?>"
 								class="<?php echo esc_attr( $value['class'] ); ?>"
 								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 								/><?php echo esc_html( $value['suffix'] ); ?> <?php echo wp_kses_post( $description ); ?>
 								<a href="<?php echo esc_url( RS_FEATURED_IMAGE_PLUGIN_PRO_URL . '/?utm_source=plugin&utm_medium=referral&utm_campaign=settings' ); ?>" target="_blank"><?php echo esc_html__( 'Checkout Pro now', 'really-simple-featured-image' ); ?></a>
 						</td>
@@ -431,7 +430,7 @@ class Admin_Settings {
 								id="<?php echo esc_attr( $value['id'] ); ?>"
 								style="<?php echo esc_attr( $value['css'] ); ?>"
 								class="<?php echo esc_attr( $value['class'] ); ?>"
-								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 								><?php echo esc_html( $option_value ); ?></a><?php echo esc_html( $value['suffix'] ); ?> <?php echo esc_html( $description ); ?>
 						</td>
 					</tr>
@@ -453,7 +452,7 @@ class Admin_Settings {
 								style="<?php echo esc_attr( $value['css'] ); ?>"
 								class="<?php echo esc_attr( $value['class'] ); ?>"
 								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 								><?php echo esc_textarea( $option_value ); ?></textarea>
 
 								<p class="description"><?php echo wp_kses_post( $description ); ?></span>
@@ -481,7 +480,7 @@ class Admin_Settings {
 								id="<?php echo esc_attr( $value['id'] ); ?>"
 								style="<?php echo esc_attr( $value['css'] ); ?>"
 								class="<?php echo esc_attr( $value['class'] ); ?> <?php echo ( 'multiselect' === $value['type'] ) ? 'rs_featured_image-multi-select' : ''; ?>"
-								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 								<?php echo 'multiselect' === $value['type'] ? 'multiple="multiple"' : ''; ?>
 								>
 								<?php
@@ -525,7 +524,7 @@ class Admin_Settings {
 							id="<?php echo esc_attr( $value['id'] ); ?>"
 							style="<?php echo esc_attr( $value['css'] ); ?>"
 							class="<?php echo esc_attr( $value['class'] ); ?>"
-							<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+							<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 							<?php echo 'multiselect' === $value['type'] ? 'multiple="multiple"' : ''; ?>
 							>
 							<?php
@@ -577,7 +576,7 @@ class Admin_Settings {
 								value="<?php echo $has_image_set ? esc_attr( $option_value ) : ''; ?>"
 								class="<?php echo esc_attr( $value['class'] ); ?>"
 								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 								/><?php echo esc_html( $value['suffix'] ); ?>
 								<?php echo wp_kses_post( $description ); ?>
 						</td>
@@ -629,7 +628,7 @@ class Admin_Settings {
 								data-default-color="<?php echo esc_attr( $default_color ); ?>"
 								value="<?php echo $has_color_set ? esc_attr( $option_value ) : esc_attr( $default_color ); ?>"
 								class="color-field <?php echo esc_attr( $value['class'] ); ?>"
-								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 								/>
 						</td>
 					</tr>
@@ -660,7 +659,7 @@ class Admin_Settings {
 								data-default-color="<?php echo esc_attr( $default_color ); ?>"
 								value="<?php echo $has_color_set ? esc_attr( $option_value ) : ''; ?>"
 								class="color-field <?php echo esc_attr( $value['class'] ); ?>"
-								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 								/>
 						</td>
 					</tr>
@@ -689,7 +688,7 @@ class Admin_Settings {
 											type="radio"
 											style="<?php echo esc_attr( $value['css'] ); ?>"
 											class="<?php echo esc_attr( $value['class'] ); ?>"
-											<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+											<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 											<?php checked( $key, $option_value ); ?>
 											/> <?php echo esc_html( $val ); ?></label>
 									</li>
@@ -784,7 +783,7 @@ class Admin_Settings {
 								class="<?php echo esc_attr( isset( $value['class'] ) ? $value['class'] : '' ); ?>"
 								value="1"
 								<?php checked( $option_value, true ); ?>
-								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 							/> <?php echo esc_html( $description ); ?>
 							<?php if ( $value['switch'] ) { ?>
 								<span><?php esc_html_e( 'Toggle', 'really-simple-featured-image' ); ?></span>
@@ -817,7 +816,7 @@ class Admin_Settings {
 								id="<?php echo esc_attr( $value['id'] ); ?>"
 								style="<?php echo esc_attr( $value['css'] ); ?>"
 								class="<?php echo esc_attr( $value['class'] ); ?>"
-								<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?>
+								<?php echo implode( ' ', $custom_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each name and value is escaped with esc_attr() above. ?>
 								value="<?php echo esc_attr( $value['value'] ); ?>"
 								<?php if ( $value['disabled'] ) : ?>
 									disabled="disabled"
@@ -951,7 +950,7 @@ class Admin_Settings {
 	/**
 	 * Save admin fields.
 	 *
-	 * Loops though the ReallySimpleFreeShipping options array and outputs each field.
+	 * Loops though the ReallySimpleFeaturedImage options array and outputs each field.
 	 *
 	 * @param array $options Options array to output.
 	 * @return bool
@@ -1011,9 +1010,32 @@ class Admin_Settings {
 				case 'textarea':
 					$value = wp_kses_post( trim( $raw_value ) );
 					break;
+				case 'number':
+					if ( is_null( $raw_value ) ) {
+						$value = null;
+					} elseif ( '' === trim( (string) $raw_value ) && isset( $option['default'] ) ) {
+						// An emptied field goes back to its default.
+						$value = absint( $option['default'] );
+					} else {
+						$value = absint( $raw_value );
+					}
+
+					if ( ! is_null( $value ) && isset( $option['custom_attributes']['min'] ) ) {
+						$value = max( $value, absint( $option['custom_attributes']['min'] ) );
+					}
+
+					if ( ! is_null( $value ) && isset( $option['custom_attributes']['max'] ) ) {
+						$value = min( $value, absint( $option['custom_attributes']['max'] ) );
+					}
+					break;
 				case 'multiselect':
 				case 'multi-checkbox':
 					$value = array_filter( array_map( __NAMESPACE__ . '\rs_featured_image_clean', (array) $raw_value ) );
+
+					// Keep only choices the field offers.
+					if ( 'multi-checkbox' === $option['type'] && ! empty( $option['options'] ) && is_array( $option['options'] ) ) {
+						$value = array_intersect_key( $value, $option['options'] );
+					}
 					break;
 				case 'select':
 					$allowed_values = empty( $option['options'] ) ? array() : array_map( 'strval', array_keys( $option['options'] ) );
