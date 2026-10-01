@@ -66,7 +66,7 @@ class Rollback_Settings extends Settings_Page {
 
 			if ( ! empty( $versions ) ) {
 				$settings[] = array(
-					'title'     => __( 'Rollback Really Simple Featured Image', 'really-simple-featured-image' ),
+					'title'     => __( 'Rollback RSFI', 'really-simple-featured-image' ),
 					'id'        => 'rs_featured_image_rollback_version_select_option',
 					'type'      => 'select',
 					'options'   => array_combine( $versions, $versions ),
