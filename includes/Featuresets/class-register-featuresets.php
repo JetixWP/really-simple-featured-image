@@ -43,6 +43,13 @@ class Register_Featuresets {
 	 * Initialize all Featuresets.
 	 */
 	public function init_featuresets() {
+		// Rollback to earlier versions (admin only).
+		if ( is_admin() ) {
+			require_once __DIR__ . '/rollback/class-rollbacker.php';
+			require_once __DIR__ . '/rollback/class-init.php';
+
+			\RS_Featured_Image\Featuresets\Rollback\Init::get_instance();
+		}
 
 		do_action( 'rs_featured_image_after_featuresets_initialize' );
 	}
