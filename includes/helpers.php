@@ -78,6 +78,21 @@ function get_items_by_position( array $items, string $position ) {
 }
 
 /**
+ * Get how many characters of post content to scan for a source.
+ *
+ * @since 1.1.0
+ *
+ * @param string $type Either image or video.
+ *
+ * @return int Number of characters, 6000 when not set.
+ */
+function get_scan_length( string $type ) {
+	$length = absint( Options::get_instance()->get( $type . '_content_length', 6000 ) );
+
+	return $length > 0 ? $length : 6000;
+}
+
+/**
  * Get the post types automatic featured images are enabled for.
  *
  * @return string[] Post type slugs.

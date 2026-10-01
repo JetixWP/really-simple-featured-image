@@ -1011,6 +1011,9 @@ class Admin_Settings {
 				case 'textarea':
 					$value = wp_kses_post( trim( $raw_value ) );
 					break;
+				case 'number':
+					$value = is_null( $raw_value ) ? null : absint( $raw_value );
+					break;
 				case 'multiselect':
 				case 'multi-checkbox':
 					$value = array_filter( array_map( __NAMESPACE__ . '\rs_featured_image_clean', (array) $raw_value ) );

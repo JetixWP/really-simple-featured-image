@@ -19,6 +19,7 @@ use function RS_Featured_Image\set_featured_image_from_url;
 use function RS_Featured_Image\get_supported_image_extensions;
 use function RS_Featured_Image\get_items_by_position;
 use function RS_Featured_Image\should_process_post;
+use function RS_Featured_Image\get_scan_length;
 
 /**
  * Class Source_Content
@@ -72,9 +73,9 @@ class Source_Content {
 			return;
 		}
 
-		$content_length = apply_filters( 'rs_featured_image_read_content_length_limit', 6000, $source_set, $post_id );
+		$content_length = absint( apply_filters( 'rs_featured_image_read_content_length_limit', get_scan_length( 'image' ), $source_set, $post_id ) );
 
-		// Limit content length to 6000 characters to improve performance.
+		// Limit how much content is read to keep saves fast.
 		$content = substr( $content, 0, $content_length );
 
 		// Extract image URLs from content.
