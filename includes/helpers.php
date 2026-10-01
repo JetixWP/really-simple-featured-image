@@ -40,6 +40,66 @@ function get_supported_image_extensions() {
 }
 
 /**
+ * Get the post types automatic featured images are enabled for.
+ *
+ * @return string[] Post type slugs.
+ */
+function get_enabled_post_types() {
+	$defaults = apply_filters(
+		'rs_featured_image_default_enabled_post_types',
+		array(
+			'post' => true,
+			'page' => true,
+		)
+	);
+
+	$post_types = Options::get_instance()->get( 'post_types', $defaults );
+
+	if ( ! is_array( $post_types ) ) {
+		$post_types = $defaults;
+	}
+
+	return array_keys( array_filter( $post_types ) );
+}
+
+/**
+ * Check whether a post should get an automatic featured image.
+ *
+ * @param int|\WP_Post $post Post ID or object.
+ *
+ * @return bool
+ */
+function should_process_post( $post ) {
+	$post = get_post( $post );
+
+	if ( ! $post instanceof \WP_Post ) {
+		return false;
+	}
+
+	$should_process = true;
+
+	if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_revision( $post ) || wp_is_post_autosave( $post ) ) {
+		$should_process = false;
+	} elseif ( in_array( $post->post_status, array( 'auto-draft', 'inherit', 'trash' ), true ) ) {
+		$should_process = false;
+	} elseif ( ! in_array( $post->post_type, get_enabled_post_types(), true ) || ! post_type_supports( $post->post_type, 'thumbnail' ) ) {
+		$should_process = false;
+	} elseif ( has_post_thumbnail( $post ) ) {
+		$should_process = false;
+	}
+
+	/**
+	 * Filters whether a post should get an automatic featured image.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param bool     $should_process Whether to look for a featured image.
+	 * @param \WP_Post $post           Post object.
+	 */
+	return (bool) apply_filters( 'rs_featured_image_should_process_post', $should_process, $post );
+}
+
+/**
  * Check if the given URL corresponds to an existing attachment image.
  *
  * @param string $url Image URL.

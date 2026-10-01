@@ -17,6 +17,7 @@ use RS_Featured_Image\Utils\Has_Instance;
 use function RS_Featured_Image\set_featured_image_from_existing_image;
 use function RS_Featured_Image\set_featured_image_from_url;
 use function RS_Featured_Image\get_supported_image_extensions;
+use function RS_Featured_Image\should_process_post;
 
 /**
  * Class Source_Content
@@ -28,7 +29,7 @@ class Source_Content {
 	 * Constructor.
 	 */
 	public function __construct() {
-		add_action( 'save_post', array( $this, 'check_content_for_images' ), 10, 2 );
+		add_action( 'wp_after_insert_post', array( $this, 'check_content_for_images' ), 10, 2 );
 		add_action( 'deleted_post_meta', array( $this, 'handle_deleted_thumbnail' ), 20, 3 );
 		add_action( 'rs_featured_image_setting_featured_image_from_content', array( __CLASS__, 'set_featured_image_from_content' ), 10, 2 );
 	}
@@ -40,11 +41,6 @@ class Source_Content {
 	 * @param WP_Post     $post Post object.
 	 */
 	public function check_content_for_images( int|WP_Post $post_id, WP_Post $post ) {
-		// Check if this is an autosave.
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-			return;
-		}
-
 		// Check if the option to use content images is enabled.
 		$options = Options::get_instance();
 
@@ -56,21 +52,18 @@ class Source_Content {
 			return;
 		}
 
-		// If this is a revision, switch to parent.
-		if ( wp_is_post_revision( $post_id ) && is_object( $post ) ) {
-			$post_id = $post->post_parent;
-		}
-
 		// Prevent trying to assign when trashing or untrashing posts in the list screen.
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_REQUEST['action'] ) && in_array( $_REQUEST['action'], array( 'trash', 'untrash', 'add-menu-item' ), true ) ) {
 			return;
 		}
 
-		// Ensure post is an object or if post already has a featured image.
-		if ( has_post_thumbnail( $post_id ) || ! $post ) {
+		// Only enabled post types, real posts and posts without a featured image.
+		if ( ! should_process_post( $post ) ) {
 			return;
 		}
+
+		$post_id = $post->ID;
 
 		$content = $post->post_content ?? '';
 

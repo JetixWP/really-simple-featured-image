@@ -17,6 +17,7 @@ use RS_Featured_Image\Sources\Video\Youtube_Video;
 use RS_Featured_Image\Sources\Video\Vimeo_Video;
 use RS_Featured_Image\Sources\Video\Dailymotion_Video;
 use function RS_Featured_Image\set_featured_image_from_url;
+use function RS_Featured_Image\should_process_post;
 
 /**
  * Class Source_Video
@@ -32,7 +33,7 @@ class Source_Video {
 		$this->include_video_providers();
 
 		// Hook into save_post to check for videos.
-		add_action( 'save_post', array( $this, 'check_content_for_videos' ), 10, 2 );
+		add_action( 'wp_after_insert_post', array( $this, 'check_content_for_videos' ), 10, 2 );
 
 		// Hook into the featured image setting action.
 		add_action( 'rs_featured_image_setting_featured_image_from_content_video', array( __CLASS__, 'set_featured_image_from_videos' ), 10, 2 );
@@ -54,11 +55,6 @@ class Source_Video {
 	 * @param WP_Post     $post Post object.
 	 */
 	public function check_content_for_videos( int|WP_Post $post_id, WP_Post $post ) {
-		// Check if this is an autosave.
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-			return;
-		}
-
 		// Check if the option to use content videos is enabled.
 		$options = Options::get_instance();
 
@@ -69,21 +65,18 @@ class Source_Video {
 			return;
 		}
 
-		// If this is a revision, switch to parent.
-		if ( wp_is_post_revision( $post_id ) && is_object( $post ) ) {
-			$post_id = $post->post_parent;
-		}
-
 		// Prevent trying to assign when trashing or untrashing posts in the list screen.
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_REQUEST['action'] ) && in_array( $_REQUEST['action'], array( 'trash', 'untrash', 'add-menu-item' ), true ) ) {
 			return;
 		}
 
-		// Ensure post is an object or if post already has a featured image.
-		if ( has_post_thumbnail( $post_id ) || ! $post ) {
+		// Only enabled post types, real posts and posts without a featured image.
+		if ( ! should_process_post( $post ) ) {
 			return;
 		}
+
+		$post_id = $post->ID;
 
 		$content = $post->post_content ?? '';
 
