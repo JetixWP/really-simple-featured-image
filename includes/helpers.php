@@ -327,7 +327,9 @@ function set_featured_image_from_url( int $post_id, string $image_url, string $t
 		return false;
 	}
 
-	$title = '' !== trim( $title ) ? $title : get_the_title( $post_id );
+	// Video titles come from remote providers; keep them plain text.
+	$title = sanitize_text_field( $title );
+	$title = '' !== $title ? $title : sanitize_text_field( get_the_title( $post_id ) );
 
 	$file_array = array(
 		'tmp_name' => $download['file'],
@@ -348,8 +350,8 @@ function set_featured_image_from_url( int $post_id, string $image_url, string $t
 
 	update_post_meta( $attachment_id, SOURCE_URL_META_KEY, $url );
 
-	if ( '' !== trim( $title ) ) {
-		update_post_meta( $attachment_id, '_wp_attachment_image_alt', sanitize_text_field( $title ) );
+	if ( '' !== $title ) {
+		update_post_meta( $attachment_id, '_wp_attachment_image_alt', $title );
 	}
 
 	set_post_thumbnail( $post_id, $attachment_id );
