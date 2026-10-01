@@ -127,7 +127,7 @@ class Source_Video {
 
 		// 1. DOM-based extraction (iframe, anchor)
 		if ( class_exists( 'DOMDocument' ) ) {
-			libxml_use_internal_errors( true );
+			$libxml_errors = libxml_use_internal_errors( true );
 
 			$dom = new DOMDocument();
 			$dom->loadHTML( '<?xml encoding="utf-8" ?>' . $content );
@@ -155,6 +155,7 @@ class Source_Video {
 			}
 
 			libxml_clear_errors();
+			libxml_use_internal_errors( $libxml_errors );
 		}
 
 		// 2. Raw URL scanning (plain text / builders)

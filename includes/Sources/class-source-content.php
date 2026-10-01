@@ -112,7 +112,7 @@ class Source_Content {
 
 		// 1. DOM parsing (img, source, picture, data-src)
 		if ( class_exists( 'DOMDocument' ) ) {
-			libxml_use_internal_errors( true );
+			$libxml_errors = libxml_use_internal_errors( true );
 
 			$dom = new DOMDocument();
 			$dom->loadHTML( '<?xml encoding="utf-8" ?>' . $content );
@@ -144,6 +144,7 @@ class Source_Content {
 			}
 
 			libxml_clear_errors();
+			libxml_use_internal_errors( $libxml_errors );
 		}
 
 		$supported_image_extensions         = get_supported_image_extensions();
