@@ -209,11 +209,16 @@ class Source_Content {
 				$raw_url = untrailingslashit( $site_url ) . $raw_url;
 			}
 
-			// Skip non-image garbage.
-			if (
-			'regex' === $url['type'] &&
-			! preg_match( '/\.(?:' . $supported_image_extensions_pattern . ')(\?|$)/i', $raw_url )
-			) {
+			// Only absolute web URLs; skips data:, bare relative paths and other schemes.
+			if ( ! preg_match( '#^https?://#i', $raw_url ) ) {
+				continue;
+			}
+
+			$has_image_extension = (bool) preg_match( '/\.(?:' . $supported_image_extensions_pattern . ')(\?|$)/i', $raw_url );
+			$is_same_host        = strtolower( (string) wp_parse_url( $raw_url, PHP_URL_HOST ) ) === strtolower( (string) wp_parse_url( $site_url, PHP_URL_HOST ) );
+
+			// Skip non-image garbage, and never request other paths on this site (core skips the IP check for the site's own host).
+			if ( ! $has_image_extension && ( 'regex' === $url['type'] || $is_same_host ) ) {
 				continue;
 			}
 
