@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-01T05:36:47+00:00\n"
+"POT-Creation-Date: 2026-10-01T07:53:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: really-simple-featured-image\n"
@@ -59,32 +59,32 @@ msgstr ""
 msgid "Use this image"
 msgstr ""
 
-#: includes/Settings/class-admin-settings.php:272
-#: includes/Settings/class-admin-settings.php:339
+#: includes/Settings/class-admin-settings.php:277
+#: includes/Settings/class-admin-settings.php:344
 msgid "Pro"
 msgstr ""
 
-#: includes/Settings/class-admin-settings.php:273
-#: includes/Settings/class-admin-settings.php:414
-#: includes/Settings/class-admin-settings.php:533
+#: includes/Settings/class-admin-settings.php:278
+#: includes/Settings/class-admin-settings.php:419
+#: includes/Settings/class-admin-settings.php:538
 msgid "Checkout Pro now"
 msgstr ""
 
-#: includes/Settings/class-admin-settings.php:564
-#: includes/Settings/class-admin-settings.php:592
+#: includes/Settings/class-admin-settings.php:569
+#: includes/Settings/class-admin-settings.php:597
 msgid "Change Image"
 msgstr ""
 
-#: includes/Settings/class-admin-settings.php:565
+#: includes/Settings/class-admin-settings.php:570
 msgid "Revert to Default"
 msgstr ""
 
-#: includes/Settings/class-admin-settings.php:719
-#: includes/Settings/class-admin-settings.php:784
+#: includes/Settings/class-admin-settings.php:724
+#: includes/Settings/class-admin-settings.php:789
 msgid "Toggle"
 msgstr ""
 
-#: includes/Settings/class-admin-settings.php:822
+#: includes/Settings/class-admin-settings.php:827
 msgid "Copy"
 msgstr ""
 
@@ -160,27 +160,27 @@ msgstr ""
 msgid "Set the maximum number of characters to scan/read from post content when searching for images to set as the featured image. Increasing this value may impact performance on large posts."
 msgstr ""
 
-#: includes/Settings/Tabs/class-image.php:55
+#: includes/Settings/Tabs/class-image.php:56
 msgid "Image Position in Content"
 msgstr ""
 
-#: includes/Settings/Tabs/class-image.php:56
+#: includes/Settings/Tabs/class-image.php:57
 msgid "Set which image position in the content to use as the featured image. For example, setting this to Second Image will set the 2nd image found in the content as the featured image."
 msgstr ""
 
-#: includes/Settings/Tabs/class-image.php:61
+#: includes/Settings/Tabs/class-image.php:62
 msgid "First Image"
 msgstr ""
 
-#: includes/Settings/Tabs/class-image.php:62
+#: includes/Settings/Tabs/class-image.php:63
 msgid "Second Image"
 msgstr ""
 
-#: includes/Settings/Tabs/class-image.php:63
+#: includes/Settings/Tabs/class-image.php:64
 msgid "Second Last Image"
 msgstr ""
 
-#: includes/Settings/Tabs/class-image.php:64
+#: includes/Settings/Tabs/class-image.php:65
 msgid "Last Image"
 msgstr ""
 
@@ -200,27 +200,27 @@ msgstr ""
 msgid "Set the maximum number of characters to scan/read from post content when searching for videos to set as the featured image. Increasing this value may impact performance on large posts."
 msgstr ""
 
-#: includes/Settings/Tabs/class-video.php:55
+#: includes/Settings/Tabs/class-video.php:56
 msgid "Video Position in Content"
 msgstr ""
 
-#: includes/Settings/Tabs/class-video.php:56
+#: includes/Settings/Tabs/class-video.php:57
 msgid "Set which video position in the content to use as the featured image. For example, setting this to Second Video will use the 2nd video found in the content to generate thumbnail and set as the featured image."
 msgstr ""
 
-#: includes/Settings/Tabs/class-video.php:61
+#: includes/Settings/Tabs/class-video.php:62
 msgid "First Video"
 msgstr ""
 
-#: includes/Settings/Tabs/class-video.php:62
+#: includes/Settings/Tabs/class-video.php:63
 msgid "Second Video"
 msgstr ""
 
-#: includes/Settings/Tabs/class-video.php:63
+#: includes/Settings/Tabs/class-video.php:64
 msgid "Second Last Video"
 msgstr ""
 
-#: includes/Settings/Tabs/class-video.php:64
+#: includes/Settings/Tabs/class-video.php:65
 msgid "Last Video"
 msgstr ""
 
