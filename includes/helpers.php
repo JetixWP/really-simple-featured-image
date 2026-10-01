@@ -156,7 +156,7 @@ function get_attachment_by_url( string $url ) {
  * @param int $post_id Post ID.
  * @param int $attachment_id Attachment ID.
  *
- * @return bool True on success, false otherwise.
+ * @return int|false Attachment ID on success, false otherwise.
  */
 function set_featured_image_from_attachment( int $post_id, int $attachment_id ) {
 	if ( empty( $post_id ) || empty( $attachment_id ) ) {
@@ -164,9 +164,7 @@ function set_featured_image_from_attachment( int $post_id, int $attachment_id ) 
 	}
 
 	// Set as featured image.
-	set_post_thumbnail( $post_id, $attachment_id );
-
-	return true;
+	return set_post_thumbnail( $post_id, $attachment_id ) ? $attachment_id : false;
 }
 
 /**
@@ -185,41 +183,122 @@ function set_featured_image_from_url( int $post_id, string $image_url, string $t
 
 	$url = esc_url_raw( $image_url );
 
+	if ( empty( $url ) ) {
+		return false;
+	}
+
 	if ( ! function_exists( 'media_handle_sideload' ) ) {
 		require_once ABSPATH . 'wp-admin/includes/media.php';
 		require_once ABSPATH . 'wp-admin/includes/file.php';
 		require_once ABSPATH . 'wp-admin/includes/image.php';
 	}
 
-	$tmp = download_url( $url );
+	$download = download_remote_image( $url );
 
-	if ( is_wp_error( $tmp ) ) {
+	if ( ! $download ) {
 		return false;
 	}
 
-	$file_array             = array();
-	$file_array['tmp_name'] = $tmp;
-	$file_array['name']     = basename( wp_parse_url( $url, PHP_URL_PATH ) );
+	$title = '' !== trim( $title ) ? $title : get_the_title( $post_id );
 
-	if ( empty( pathinfo( $file_array['name'], PATHINFO_EXTENSION ) ) ) {
-		$file_array['name'] .= '.jpg'; // Force extension.
-	}
+	$file_array = array(
+		'tmp_name' => $download['file'],
+		'name'     => $download['name'],
+	);
 
 	$post_data = array(
-		'post_title'  => get_the_title( $post_id ),
+		'post_title'  => $title,
 		'post_parent' => $post_id,
 	);
 
 	$attachment_id = media_handle_sideload( $file_array, $post_id, null, $post_data );
 
 	if ( is_wp_error( $attachment_id ) ) {
-		wp_delete_file( $tmp );
+		wp_delete_file( $download['file'] );
 		return false;
+	}
+
+	if ( '' !== trim( $title ) ) {
+		update_post_meta( $attachment_id, '_wp_attachment_image_alt', sanitize_text_field( $title ) );
 	}
 
 	set_post_thumbnail( $post_id, $attachment_id );
 
-	return true;
+	return (int) $attachment_id;
+}
+
+/**
+ * Download a remote image to a temporary file.
+ *
+ * Uses wp_safe_remote_get() so local and private network addresses are refused, caps the
+ * download size and only accepts real image files.
+ *
+ * @since 1.1.0
+ *
+ * @param string $url Image URL.
+ *
+ * @return array{file: string, name: string}|false Temporary file path and file name, or false.
+ */
+function download_remote_image( string $url ) {
+	if ( ! function_exists( 'wp_tempnam' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+	}
+
+	/**
+	 * Filters the largest remote image we download, in bytes.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param int $max_size Maximum size in bytes. Default 15 MB.
+	 */
+	$max_size = (int) apply_filters( 'rs_featured_image_max_download_size', 15 * MB_IN_BYTES );
+
+	$path     = (string) wp_parse_url( $url, PHP_URL_PATH );
+	$basename = sanitize_file_name( pathinfo( $path, PATHINFO_FILENAME ) );
+	$tmp_file = wp_tempnam( $basename ? $basename : 'featured-image' );
+
+	if ( ! $tmp_file ) {
+		return false;
+	}
+
+	$response = wp_safe_remote_get(
+		$url,
+		array(
+			'timeout'             => 20,
+			'redirection'         => 3,
+			'stream'              => true,
+			'filename'            => $tmp_file,
+			'limit_response_size' => $max_size,
+		)
+	);
+
+	$length = (int) wp_remote_retrieve_header( $response, 'content-length' );
+
+	if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) || $length > $max_size || ! file_exists( $tmp_file ) || filesize( $tmp_file ) >= $max_size ) {
+		wp_delete_file( $tmp_file );
+		return false;
+	}
+
+	$extensions = array(
+		'image/jpeg' => 'jpg',
+		'image/png'  => 'png',
+		'image/gif'  => 'gif',
+		'image/webp' => 'webp',
+		'image/avif' => 'avif',
+		'image/bmp'  => 'bmp',
+	);
+
+	$mime = wp_get_image_mime( $tmp_file );
+
+	if ( ! $mime || ! isset( $extensions[ $mime ] ) ) {
+		wp_delete_file( $tmp_file );
+		return false;
+	}
+
+	return array(
+		'file' => $tmp_file,
+		'name' => ( $basename ? $basename : 'featured-image' ) . '.' . $extensions[ $mime ],
+	);
 }
 
 /**
@@ -251,7 +330,7 @@ function set_featured_image_from_existing_image( int $post_id, string $image_url
 	}
 
 	// Validate attachment type.
-	if ( get_post_type( $attachment_id ) !== 'attachment' ) {
+	if ( get_post_type( $attachment_id ) !== 'attachment' || ! wp_attachment_is_image( $attachment_id ) ) {
 		return false;
 	}
 
