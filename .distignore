@@ -10,6 +10,7 @@
 /bin
 /phpunit.xml
 /build
+/src
 .nvmrc
 .wp-env.json
 phpcs.xml.dist
@@ -27,6 +28,7 @@ CONTRIBUTING.md
 CREDITS.md
 LICENSE.md
 README.md
+readme.md
 composer.json
 composer.lock
 package-lock.json
@@ -37,3 +39,4 @@ phpunit.xml
 webpack.config.js
 gulpfile.js
 gulp.config.json
+really-simple-featured-image.zip
