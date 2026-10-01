@@ -86,6 +86,21 @@ class Rollback_Settings extends Settings_Page {
 			);
 		}
 
+		if ( ! current_user_can( 'update_plugins' ) ) {
+			$settings[] = array(
+				'title' => __( 'Rollback Versions', 'really-simple-featured-image' ),
+				'desc'  => is_multisite()
+					? __( 'Only network administrators can reinstall earlier versions of plugins on this network.', 'really-simple-featured-image' )
+					: __( 'Only users who can update plugins can reinstall earlier versions.', 'really-simple-featured-image' ),
+				'type'  => 'title',
+				'id'    => 'rs_featured_image_plugin_rollback_version',
+			);
+			$settings[] = array(
+				'type' => 'sectionend',
+				'id'   => 'rs_featured_image_plugin_rollback',
+			);
+		}
+
 		$settings = apply_filters( 'rs_featured_image_version_control_settings', $settings );
 
 		return apply_filters( 'rs_featured_image_get_settings_' . $this->id, $settings );
