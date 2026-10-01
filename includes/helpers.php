@@ -93,6 +93,60 @@ function get_scan_length( string $type ) {
 }
 
 /**
+ * How many found images or videos to try per save.
+ *
+ * Keeps saves fast and stops a post full of broken links from making many remote requests.
+ *
+ * @since 1.1.0
+ *
+ * @return int
+ */
+function get_max_attempts() {
+	/**
+	 * Filters how many found images or videos are tried per save.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param int $max_attempts Default 3.
+	 */
+	return max( 1, (int) apply_filters( 'rs_featured_image_max_attempts', 3 ) );
+}
+
+/**
+ * Check whether a remote image may be downloaded into the Media Library for a post.
+ *
+ * The person saving the post (or its author when nobody is logged in, e.g. cron or imports)
+ * must be allowed to upload files, the same as adding the image by hand.
+ *
+ * @since 1.1.0
+ *
+ * @param int $post_id Post ID.
+ *
+ * @return bool
+ */
+function can_download_for_post( int $post_id ) {
+	$user_id = get_current_user_id();
+
+	if ( ! $user_id ) {
+		$post    = get_post( $post_id );
+		$user_id = $post ? (int) $post->post_author : 0;
+	}
+
+	$can_download = $user_id && user_can( $user_id, 'upload_files' );
+
+	/**
+	 * Filters whether a remote image may be downloaded for a post.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param bool $can_download Whether downloading is allowed.
+	 * @param int  $post_id      Post ID.
+	 * @param int  $user_id      User the check ran for, 0 when none.
+	 */
+	return (bool) apply_filters( 'rs_featured_image_can_download', $can_download, $post_id, $user_id );
+}
+
+/**
  * Get the post types automatic featured images are enabled for.
  *
  * @return string[] Post type slugs.
@@ -255,6 +309,10 @@ function set_featured_image_from_url( int $post_id, string $image_url, string $t
 
 	if ( ! empty( $existing ) && wp_attachment_is_image( $existing[0] ) ) {
 		return set_featured_image_from_attachment( $post_id, (int) $existing[0] );
+	}
+
+	if ( ! can_download_for_post( $post_id ) ) {
+		return false;
 	}
 
 	if ( ! function_exists( 'media_handle_sideload' ) ) {

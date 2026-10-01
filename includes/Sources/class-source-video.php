@@ -18,6 +18,7 @@ use RS_Featured_Image\Sources\Video\Vimeo_Video;
 use RS_Featured_Image\Sources\Video\Dailymotion_Video;
 use function RS_Featured_Image\set_featured_image_from_url;
 use function RS_Featured_Image\get_items_by_position;
+use function RS_Featured_Image\get_max_attempts;
 use function RS_Featured_Image\should_process_post;
 use function RS_Featured_Image\get_scan_length;
 
@@ -244,7 +245,7 @@ class Source_Video {
 
 		$video_content_position = $options->get( 'video_content_position', 'first' );
 
-		foreach ( get_items_by_position( $video_urls, (string) $video_content_position ) as $video_url ) {
+		foreach ( array_slice( get_items_by_position( $video_urls, (string) $video_content_position ), 0, get_max_attempts() ) as $video_url ) {
 			$video_data    = self::get_video_data_by_host_and_id( $video_url['host'], $video_url['id'] );
 			$thumbnail_url = $video_data['thumbnail_url'] ?? '';
 

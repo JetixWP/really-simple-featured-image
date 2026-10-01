@@ -18,6 +18,7 @@ use function RS_Featured_Image\set_featured_image_from_existing_image;
 use function RS_Featured_Image\set_featured_image_from_url;
 use function RS_Featured_Image\get_supported_image_extensions;
 use function RS_Featured_Image\get_items_by_position;
+use function RS_Featured_Image\get_max_attempts;
 use function RS_Featured_Image\should_process_post;
 use function RS_Featured_Image\get_scan_length;
 
@@ -238,7 +239,7 @@ class Source_Content {
 
 		$image_content_position = $options->get( 'image_content_position', 'first' );
 
-		foreach ( get_items_by_position( $image_urls, (string) $image_content_position ) as $image_url ) {
+		foreach ( array_slice( get_items_by_position( $image_urls, (string) $image_content_position ), 0, get_max_attempts() ) as $image_url ) {
 			// Reuse an existing attachment first, download only when there is none.
 			$attachment_id = set_featured_image_from_existing_image( $post_id, $image_url );
 
